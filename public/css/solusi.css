@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f6fa;
+}
+
+header {
+    background: #34495e;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    margin-bottom: 8px;
+}
+
+.nilai {
+    display: inline-block;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #555;
+}
+
+.card p {
+    line-height: 1.7;
+    color: #444;
+}
+
+/* Warna berdasarkan tingkat */
+.rendah {
+    border-left: 6px solid #2ecc71;
+}
+
+.sedang {
+    border-left: 6px solid #f39c12;
+}
+
+.tinggi {
+    border-left: 6px solid #e74c3c;
+}
+
+.btn {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn a {
+    text-decoration: none;
+    background: #3498db;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 6px;
+}
+
+.btn a:hover {
+    background: #2980b9;
+}

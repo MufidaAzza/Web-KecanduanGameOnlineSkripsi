@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Admin | ADDICTICA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.29/dist/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "system-ui", "-apple-system", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-100 text-gray-700">
+<div class="min-h-screen bg-gray-100">
+  <div class="flex">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full lg:translate-x-0 bg-[#0b3c6d] text-white transition-transform duration-200">
+      <div class="flex items-center gap-3 px-6 py-6 border-b border-white/10">
+        <div class="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center">
+          <svg class="h-5 w-5 text-yellow-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12l2-2 4 4 8-8 4 4"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm uppercase text-white/60">Admin Panel</p>
+          <p class="text-lg font-semibold">ADDICTICA</p>
+        </div>
+      </div>
+
+      <nav class="px-4 py-6">
+        <p class="px-2 text-xs uppercase tracking-wider text-white/50">Menu Utama</p>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li>
+            <a href="/admin" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12l9-9 9 9"></path>
+                <path d="M9 21V9h6v12"></path>
+              </svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="/admin_manajemen" class="flex items-center gap-3 rounded-lg bg-white/10 px-3 py-2 text-yellow-200 font-semibold">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+                <path d="M16 20a4 4 0 0 0-8 0"></path>
+              </svg>
+              Manajemen Admin
+            </a>
+          </li>
+          <li>
+            <a href="/admin_pengguna" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              Data Pengguna
+            </a>
+          </li>
+          <li>
+            <a href="/admin_riwayat" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 7v5l3 3"></path>
+              </svg>
+              Riwayat Diagnosa
+            </a>
+          </li>
+          <li>
+            <a href="/admin_detail" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6h16"></path>
+                <path d="M4 12h16"></path>
+                <path d="M4 18h16"></path>
+              </svg>
+              Detail Hasil
+            </a>
+          </li>
+        </ul>
+
+        <div class="mt-8 border-t border-white/10 pt-4">
+          <a href="/logout" class="flex items-center gap-3 rounded-lg px-3 py-2 text-red-200 hover:text-red-100 hover:bg-white/10 transition">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <path d="M16 17l5-5-5-5"></path>
+              <path d="M21 12H9"></path>
+            </svg>
+            Logout
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- BACKDROP -->
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-black/30 opacity-0 pointer-events-none transition lg:hidden"></div>
+
+    <!-- CONTENT -->
+    <div class="flex-1 lg:ml-64">
+
+      <!-- TOPBAR -->
+      <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-200">
+        <div class="flex items-center justify-between gap-4 px-6 py-4">
+          <div class="flex items-center gap-3">
+            <button id="sidebarToggle" class="lg:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-gray-50">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18"></path>
+                <path d="M3 12h18"></path>
+                <path d="M3 18h18"></path>
+              </svg>
+            </button>
+            <div>
+              <h1 class="text-2xl font-bold text-[#0b3c6d]">Manajemen Admin</h1>
+              <p class="text-xs text-gray-500">Kelola data admin dan akses sistem</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="hidden md:flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3 py-2">
+              <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+              <input id="searchAdminTop" type="text" placeholder="Cari admin" class="bg-transparent text-sm outline-none placeholder:text-gray-400">
+            </div>
+            <button id="notifBtn" class="relative inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-gray-50">
+              <span class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-yellow-400"></span>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </button>
+            <div class="flex items-center gap-2 rounded-full border border-gray-200 px-2 py-1.5">
+              <div class="h-8 w-8 rounded-full bg-[#0b3c6d] text-white flex items-center justify-center text-sm font-semibold">AD</div>
+              <div class="hidden sm:block text-xs">
+                <p class="font-semibold text-gray-700">Admin</p>
+                <p class="text-gray-400">Super Admin</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="px-6 py-8 space-y-6">
+
+        <!-- FORM TAMBAH ADMIN -->
+        <section class="bg-white shadow-sm rounded-2xl p-6 border border-gray-100">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+            <div>
+              <h2 class="text-lg font-semibold text-[#0b3c6d]">Tambah Admin</h2>
+              <p class="text-sm text-gray-500">Lengkapi data admin baru di bawah ini.</p>
+            </div>
+            <div class="text-xs bg-blue-50 text-[#0b3c6d] px-3 py-1 rounded-full border border-blue-100">Form Input</div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label for="nama" class="text-xs font-semibold text-gray-500">Nama Admin</label>
+              <input type="text" id="nama" placeholder="Nama lengkap" class="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-100">
+            </div>
+            <div>
+              <label for="email" class="text-xs font-semibold text-gray-500">Email Admin</label>
+              <input type="email" id="email" placeholder="Alamat email" class="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-100">
+            </div>
+            <div>
+              <label for="password" class="text-xs font-semibold text-gray-500">Password (opsional)</label>
+              <input type="password" id="password" placeholder="Kosongkan untuk 123456" class="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-100">
+            </div>
+            <div>
+              <label for="foto" class="text-xs font-semibold text-gray-500">Foto Profil</label>
+              <input type="file" id="foto" class="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-1 file:text-xs file:font-semibold file:text-[#0b3c6d]">
+            </div>
+          </div>
+
+          <button id="btnTambah" onclick="tambahAdmin()" class="mt-5 inline-flex items-center gap-2 rounded-full bg-[#0b3c6d] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0a335c] transition">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14"></path>
+              <path d="M5 12h14"></path>
+            </svg>
+            <span id="btnTambahLabel">Tambah Admin</span>
+          </button>
+        </section>
+
+        <!-- TABEL ADMIN -->
+        <section class="bg-white shadow-sm rounded-2xl p-6 border border-gray-100">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+            <div>
+              <h2 class="text-xl font-semibold text-[#0b3c6d]">Daftar Admin</h2>
+              <p class="text-sm text-gray-500">Kelola admin yang terdaftar pada sistem.</p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <div class="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3 py-2">
+                <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                <input id="searchAdmin" type="text" placeholder="Cari admin" class="bg-transparent text-sm outline-none placeholder:text-gray-400">
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button id="exportAdminExcel" class="inline-flex items-center gap-1 rounded-full bg-green-100 text-green-700 px-3 py-2 text-xs font-semibold hover:bg-green-200 transition">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h10l6 6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"></path>
+                    <path d="M14 4v6h6"></path>
+                    <path d="m9 14 2 2 4-4"></path>
+                  </svg>
+                  Export Excel
+                </button>
+                <button id="exportAdminPdf" class="inline-flex items-center gap-1 rounded-full bg-red-100 text-red-700 px-3 py-2 text-xs font-semibold hover:bg-red-200 transition">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6"></path>
+                    <path d="M8 13h8"></path>
+                    <path d="M8 17h5"></path>
+                  </svg>
+                  Export PDF
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border border-gray-200 rounded-xl overflow-hidden">
+              <thead class="bg-gray-50 text-gray-500">
+                <tr>
+                  <th class="p-3 text-left font-medium">Foto</th>
+                  <th class="p-3 text-left font-medium">
+                    <button class="sort-btn flex items-center gap-2" data-key="nama" data-type="text">
+                      Nama
+                      <span class="sort-icon text-xs text-gray-400">↕</span>
+                    </button>
+                  </th>
+                  <th class="p-3 text-left font-medium">
+                    <button class="sort-btn flex items-center gap-2" data-key="email" data-type="text">
+                      Email
+                      <span class="sort-icon text-xs text-gray-400">↕</span>
+                    </button>
+                  </th>
+                  <th class="p-3 text-left font-medium">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tabelAdmin" class="text-gray-600"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+</div>
+</div>
+</div>
+
+<!-- MODAL EDIT -->
+<div id="editBackdrop" class="fixed inset-0 bg-black/40 opacity-0 pointer-events-none transition"></div>
+<div id="editModal" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none transition">
+  <div class="w-full max-w-xl rounded-2xl bg-white p-6 shadow-xl border border-gray-100">
+    <div class="flex items-start justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-[#0b3c6d]">Edit Admin</h3>
+        <p class="text-sm text-gray-500">Perbarui data admin yang dipilih.</p>
+      </div>
+      <button id="closeEditModal" class="rounded-lg border border-gray-200 p-2 text-gray-400 hover:text-gray-600">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18"></path>
+          <path d="M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label for="editNama" class="text-xs font-semibold text-gray-500">Nama Admin</label>
+        <input type="text" id="editNama" class="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-100">
+      </div>
+      <div>
+        <label for="editEmail" class="text-xs font-semibold text-gray-500">Email Admin</label>
+        <input type="email" id="editEmail" class="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-100">
+      </div>
+      <div>
+        <label for="editPassword" class="text-xs font-semibold text-gray-500">Password (opsional)</label>
+        <input type="password" id="editPassword" placeholder="Kosongkan jika tidak diubah" class="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-100">
+      </div>
+      <div>
+        <label for="editFoto" class="text-xs font-semibold text-gray-500">Foto Profil</label>
+        <input type="file" id="editFoto" class="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-1 file:text-xs file:font-semibold file:text-[#0b3c6d]">
+      </div>
+    </div>
+
+    <div class="mt-4 flex items-center gap-3">
+      <img id="editFotoPreview" src="https://via.placeholder.com/40" alt="Preview" class="h-12 w-12 rounded-full object-cover border border-gray-200">
+      <p class="text-xs text-gray-500">Preview foto terbaru</p>
+    </div>
+
+    <div class="mt-6 flex items-center justify-end gap-3">
+      <button id="cancelEdit" class="rounded-full border border-gray-200 px-4 py-2 text-sm text-gray-500 hover:bg-gray-50">Batal</button>
+      <button id="saveEdit" class="rounded-full bg-[#0b3c6d] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0a335c]">Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="fixed bottom-6 right-6 hidden items-center gap-2 rounded-xl px-4 py-3 text-sm text-white shadow-lg"></div>
+
+<script>
+  let admins = [];
+  let filteredAdmins = [];
+  const sortState = { key: null, dir: null, type: null };
+
+  const toast = document.getElementById("toast");
+  const searchAdmin = document.getElementById("searchAdmin");
+  const searchAdminTop = document.getElementById("searchAdminTop");
+  const btnTambah = document.getElementById("btnTambah");
+  const btnTambahLabel = document.getElementById("btnTambahLabel");
+  const notifBtn = document.getElementById("notifBtn");
+  const passwordInput = document.getElementById("password");
+  const editModal = document.getElementById("editModal");
+  const editBackdrop = document.getElementById("editBackdrop");
+  const closeEditModal = document.getElementById("closeEditModal");
+  const cancelEdit = document.getElementById("cancelEdit");
+  const saveEdit = document.getElementById("saveEdit");
+  const editNama = document.getElementById("editNama");
+  const editEmail = document.getElementById("editEmail");
+  const editPassword = document.getElementById("editPassword");
+  const editFoto = document.getElementById("editFoto");
+  const editFotoPreview = document.getElementById("editFotoPreview");
+
+  let editingAdminId = null;
+
+  function showToast(message, type = "info") {
+    const styles = {
+      success: "bg-green-600",
+      error: "bg-red-600",
+      info: "bg-[#0b3c6d]"
+    };
+    toast.className = `fixed bottom-6 right-6 flex items-center gap-2 rounded-xl px-4 py-3 text-sm text-white shadow-lg ${styles[type] || styles.info}`;
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+    setTimeout(() => toast.classList.add("hidden"), 2400);
+  }
+
+  function formatFileDate() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+  }
+
+  function formatTanggal(dateValue) {
+    if (!dateValue) return "-";
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return "-";
+    return date.toLocaleDateString("id-ID");
+  }
+
+  function exportExcel({ title, identityLines, headers, values, filename }) {
+    const body = Array.isArray(values[0]) ? values : [values];
+    const sheetData = [
+      [title],
+      ["Sistem: ADDICTICA"],
+      [`Tanggal Ekspor: ${new Date().toLocaleString("id-ID")}`],
+      ...identityLines.map((line) => [line]),
+      [],
+      headers,
+      ...body
+    ];
+    const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+    worksheet["!cols"] = headers.map((header) => ({ wch: Math.max(14, header.length + 4) }));
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan");
+    XLSX.writeFile(workbook, filename);
+  }
+
+  function exportPdf({ title, identityLines, headers, values, filename }) {
+    const { jsPDF } = window.jspdf;
+    const body = Array.isArray(values[0]) ? values : [values];
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text(title, 40, 50);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("Sistem: ADDICTICA", 40, 70);
+    doc.text(`Tanggal Ekspor: ${new Date().toLocaleString("id-ID")}`, 40, 86);
+    identityLines.forEach((line, idx) => {
+      doc.text(line, 40, 104 + idx * 14);
+    });
+    const startY = 124 + identityLines.length * 14;
+    doc.autoTable({
+      startY,
+      head: [headers],
+      body,
+      styles: { fontSize: 10, cellPadding: 6 },
+      headStyles: { fillColor: [11, 60, 109], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 247, 250] }
+    });
+    doc.save(filename);
+  }
+
+  function isValidEmail(email) {
+    return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+  }
+
+  function applySort(data) {
+    if (!sortState.key || !sortState.dir) return data;
+    const dir = sortState.dir === "desc" ? -1 : 1;
+    return [...data].sort((a, b) => {
+      const valA = a[sortState.key];
+      const valB = b[sortState.key];
+      const aText = String(valA ?? "").toLowerCase();
+      const bText = String(valB ?? "").toLowerCase();
+      if (aText < bText) return -1 * dir;
+      if (aText > bText) return 1 * dir;
+      return a.__index - b.__index;
+    });
+  }
+
+  function updateSortIcons() {
+    document.querySelectorAll(".sort-btn").forEach((btn) => {
+      const icon = btn.querySelector(".sort-icon");
+      const isActive = btn.dataset.key === sortState.key && sortState.dir;
+      btn.classList.toggle("text-[#0b3c6d]", isActive);
+      if (!icon) return;
+      if (!isActive) {
+        icon.textContent = "↕";
+        icon.classList.remove("text-[#0b3c6d]");
+        icon.classList.add("text-gray-400");
+        return;
+      }
+      icon.textContent = sortState.dir === "asc" ? "↑" : "↓";
+      icon.classList.remove("text-gray-400");
+      icon.classList.add("text-[#0b3c6d]");
+    });
+  }
+
+  function handleSortClick(event) {
+    const btn = event.currentTarget;
+    const key = btn.dataset.key;
+    const type = btn.dataset.type;
+    if (sortState.key !== key) {
+      sortState.key = key;
+      sortState.type = type;
+      sortState.dir = "asc";
+    } else if (sortState.dir === "asc") {
+      sortState.dir = "desc";
+    } else if (sortState.dir === "desc") {
+      sortState.key = null;
+      sortState.type = null;
+      sortState.dir = null;
+    } else {
+      sortState.dir = "asc";
+    }
+    updateSortIcons();
+    tampilkanAdmin();
+  }
+
+  function setLoading(state) {
+    btnTambah.disabled = state;
+    btnTambah.classList.toggle("opacity-70", state);
+    btnTambahLabel.textContent = state ? "Menyimpan..." : "Tambah Admin";
+  }
+
+  function resolveFoto(foto) {
+    if (!foto) return "https://via.placeholder.com/40";
+    if (foto.startsWith("data:") || foto.startsWith("http")) return foto;
+    return `/uploads/${foto}`;
+  }
+
+  async function loadAdmins() {
+    try {
+      const res = await fetch("/api/admins");
+      if (!res.ok) throw new Error("Gagal mengambil data admin");
+      const data = await res.json();
+      admins = data.map((admin, index) => ({ ...admin, __index: index }));
+      tampilkanAdmin();
+      updateSortIcons();
+    } catch (error) {
+      showToast("Gagal memuat data admin", "error");
+    }
+  }
+
+  function tampilkanAdmin() {
+    const tabel = document.getElementById("tabelAdmin");
+    tabel.innerHTML = "";
+
+    const query = searchAdmin.value.toLowerCase();
+    const filtered = admins.filter((admin) => {
+        return (
+          admin.nama.toLowerCase().includes(query) ||
+          admin.email.toLowerCase().includes(query)
+        );
+      });
+    filteredAdmins = applySort(filtered);
+
+    if (filtered.length === 0) {
+      tabel.innerHTML = `
+        <tr class="border-t">
+          <td class="p-4 text-center text-sm text-gray-400" colspan="4">Belum ada data admin.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    filteredAdmins.forEach((admin) => {
+      const fotoSrc = resolveFoto(admin.foto);
+      tabel.innerHTML += `
+        <tr class="border-t hover:bg-gray-50 transition">
+          <td class="p-3">
+            <img src="${fotoSrc}" alt="${admin.nama}" class="w-10 h-10 rounded-full object-cover">
+          </td>
+          <td class="p-3">${admin.nama}</td>
+          <td class="p-3">${admin.email}</td>
+          <td class="p-3">
+            <div class="flex flex-wrap gap-2">
+              <button onclick="openEditModal('${admin._id}')" class="inline-flex items-center gap-1 rounded-full bg-yellow-100 text-yellow-700 px-3 py-1 text-xs font-semibold hover:bg-yellow-200 transition">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5"></path>
+                </svg>
+                Edit
+              </button>
+              <button onclick="hapusAdmin('${admin._id}')" class="inline-flex items-center gap-1 rounded-full bg-red-100 text-red-600 px-3 py-1 text-xs font-semibold hover:bg-red-200 transition">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18"></path>
+                  <path d="M8 6V4h8v2"></path>
+                  <path d="M19 6l-1 14H6L5 6"></path>
+                  <path d="M10 11v6"></path>
+                  <path d="M14 11v6"></path>
+                </svg>
+                Hapus
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  function downloadAdminExcel() {
+    if (!filteredAdmins.length) {
+      showToast("Tidak ada data untuk diekspor", "error");
+      return;
+    }
+    const headers = ["Nama", "Email", "Tanggal Dibuat"];
+    const values = filteredAdmins.map((admin) => [admin.nama, admin.email, formatTanggal(admin.createdAt)]);
+    exportExcel({
+      title: "Rekap Data Admin",
+      identityLines: [`Total Data: ${filteredAdmins.length}`],
+      headers,
+      values,
+      filename: `rekap-admin_${formatFileDate()}.xlsx`
+    });
+  }
+
+  function downloadAdminPdf() {
+    if (!filteredAdmins.length) {
+      showToast("Tidak ada data untuk diekspor", "error");
+      return;
+    }
+    const headers = ["Nama", "Email", "Tanggal Dibuat"];
+    const values = filteredAdmins.map((admin) => [admin.nama, admin.email, formatTanggal(admin.createdAt)]);
+    exportPdf({
+      title: "Rekap Data Admin",
+      identityLines: [`Total Data: ${filteredAdmins.length}`],
+      headers,
+      values,
+      filename: `rekap-admin_${formatFileDate()}.pdf`
+    });
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve) => {
+      if (!file) return resolve(null);
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function tambahAdmin() {
+    const nama = document.getElementById("nama").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = passwordInput.value.trim();
+    const fotoInput = document.getElementById("foto");
+
+    if (!nama || !email) {
+      showToast("Nama dan Email wajib diisi!", "error");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      showToast("Format email tidak valid", "error");
+      return;
+    }
+
+    setLoading(true);
+    const fotoSrc = await fileToBase64(fotoInput.files[0]);
+
+    try {
+      const res = await fetch("/api/admins", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nama,
+          email,
+          password: password || "",
+          foto: fotoSrc
+        })
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Gagal menambahkan admin");
+      }
+
+      document.getElementById("nama").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("foto").value = "";
+      passwordInput.value = "";
+      showToast("Admin berhasil ditambahkan (password: 123456)", "success");
+      loadAdmins();
+    } catch (error) {
+      showToast(error.message, "error");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function hapusAdmin(id) {
+    if (!confirm("Yakin ingin menghapus admin ini?")) return;
+
+    try {
+      const res = await fetch(`/api/admins/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Gagal menghapus admin");
+      }
+      showToast("Admin dihapus", "info");
+      loadAdmins();
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  }
+
+  function openEditModal(id) {
+    const admin = admins.find((item) => item._id === id);
+    if (!admin) return;
+
+    editingAdminId = id;
+    editNama.value = admin.nama || "";
+    editEmail.value = admin.email || "";
+    editPassword.value = "";
+    editFoto.value = "";
+    editFotoPreview.src = resolveFoto(admin.foto);
+
+    editModal.classList.remove("opacity-0", "pointer-events-none");
+    editBackdrop.classList.remove("opacity-0", "pointer-events-none");
+  }
+
+  function closeModal() {
+    editingAdminId = null;
+    editModal.classList.add("opacity-0", "pointer-events-none");
+    editBackdrop.classList.add("opacity-0", "pointer-events-none");
+  }
+
+  async function saveEditAdmin() {
+    if (!editingAdminId) return;
+    const namaBaru = editNama.value.trim();
+    const emailBaru = editEmail.value.trim();
+    const passwordBaru = editPassword.value.trim();
+    const fotoFile = editFoto.files[0];
+
+    if (!namaBaru || !emailBaru) {
+      showToast("Nama dan Email wajib diisi!", "error");
+      return;
+    }
+    if (!isValidEmail(emailBaru)) {
+      showToast("Format email tidak valid", "error");
+      return;
+    }
+
+    const payload = { nama: namaBaru, email: emailBaru };
+    if (passwordBaru) {
+      payload.password = passwordBaru;
+    }
+
+    if (fotoFile) {
+      const fotoSrc = await fileToBase64(fotoFile);
+      if (fotoSrc) payload.foto = fotoSrc;
+    }
+
+    try {
+      const res = await fetch(`/api/admins/${editingAdminId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Gagal memperbarui admin");
+      }
+      showToast("Data admin diperbarui", "success");
+      closeModal();
+      loadAdmins();
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  }
+
+  searchAdmin.addEventListener("input", tampilkanAdmin);
+  searchAdminTop.addEventListener("input", () => {
+    searchAdmin.value = searchAdminTop.value;
+    tampilkanAdmin();
+  });
+  document.querySelectorAll(".sort-btn").forEach((btn) => btn.addEventListener("click", handleSortClick));
+  document.getElementById("exportAdminExcel").addEventListener("click", downloadAdminExcel);
+  document.getElementById("exportAdminPdf").addEventListener("click", downloadAdminPdf);
+  editFoto.addEventListener("change", async () => {
+    const file = editFoto.files[0];
+    if (!file) return;
+    const preview = await fileToBase64(file);
+    if (preview) editFotoPreview.src = preview;
+  });
+  closeEditModal.addEventListener("click", closeModal);
+  cancelEdit.addEventListener("click", closeModal);
+  editBackdrop.addEventListener("click", closeModal);
+  saveEdit.addEventListener("click", saveEditAdmin);
+  notifBtn.addEventListener("click", () => showToast("Tidak ada notifikasi baru", "info"));
+  loadAdmins();
+
+  const sidebar = document.getElementById("sidebar");
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+
+  function openSidebar() {
+    sidebar.classList.remove("-translate-x-full");
+    sidebarBackdrop.classList.remove("opacity-0", "pointer-events-none");
+  }
+
+  function closeSidebar() {
+    sidebar.classList.add("-translate-x-full");
+    sidebarBackdrop.classList.add("opacity-0", "pointer-events-none");
+  }
+
+  sidebarToggle.addEventListener("click", openSidebar);
+  sidebarBackdrop.addEventListener("click", closeSidebar);
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 1024) {
+      sidebar.classList.remove("-translate-x-full");
+      sidebarBackdrop.classList.add("opacity-0", "pointer-events-none");
+    } else {
+      sidebar.classList.add("-translate-x-full");
+    }
+  });
+</script>
+
+</body>
+</html>
+
+

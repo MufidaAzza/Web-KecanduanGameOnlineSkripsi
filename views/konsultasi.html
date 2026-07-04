@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beranda | ADDICTICA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/theme.css">
+
+<style>
+.hero-strip{
+  background:linear-gradient(135deg,#082d52,#0b3c6d);
+  color:white;
+  text-align:center;
+  padding:70px 20px;
+}
+
+.hero-strip h1{
+  font-family:'Sora',sans-serif;
+  font-size:42px;
+  font-weight:700;
+}
+
+.hero-strip h1 span{
+  color:#f5c842;
+}
+
+.hero-strip p{
+  margin-top:12px;
+  color:rgba(255,255,255,.85);
+}
+
+.steps{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:25px;
+  flex-wrap:wrap;
+}
+
+.step-pill{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.15);
+  padding:10px 16px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.dot{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:#f5c842;
+  color:#082d52;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+main{
+  max-width:900px;
+  margin:auto;
+  padding:50px 20px;
+}
+
+.alert{
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  padding:18px;
+  border-radius:16px;
+  margin-bottom:25px;
+}
+
+.card{
+  background:white;
+  border-radius:24px;
+  padding:35px;
+  box-shadow:0 15px 35px rgba(0,0,0,.08);
+}
+
+.petunjuk{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:18px;
+  padding:25px;
+}
+
+.petunjuk-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:700;
+  color:#0b3c6d;
+  margin-bottom:15px;
+}
+
+.petunjuk ul{
+  padding-left:20px;
+}
+
+.petunjuk li{
+  margin-bottom:10px;
+}
+
+.submit-area{
+  margin-top:30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.submit-note{
+  color:#64748b;
+  line-height:1.6;
+}
+
+.btn-submit{
+  background:#0b3c6d;
+  color:white;
+  border:none;
+  padding:14px 28px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.btn-submit:hover{
+  background:#0f4c81;
+}
+
+.result-box{
+  margin-top:30px;
+  display:none;
+}
+
+footer{
+  margin-top:60px;
+  background:#0b3c6d;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+</style>
+</head>
+
+<body class="bg-slate-50 text-slate-700 font-['Plus_Jakarta_Sans']">
+ 
+  <!-- Navbar -->
+  <nav class="bg-[#0b3c6d] text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center justify-between py-4">
+        <a href="/" class="flex items-center gap-3">
+          <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#0b3c6d] font-bold">
+            AG
+          </span>
+          <div>
+            <p class="text-sm font-semibold tracking-wide">ADDICTICA</p>
+            <p class="text-xs text-white/70">Fuzzy Tsukamoto</p>
+          </div>
+        </a>
+
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+          <a href="/" class="text-white/80 hover:text-white transition">Beranda</a>
+          <a href="/tentang" class="text-white/80 hover:text-white transition">Tentang Sistem</a>
+          <a href="/gejala" class="text-white/80 hover:text-white transition">Gejala</a>
+          <a href="/konsultasi" class="relative text-yellow-300">Konsultasi</a>
+          <a href="/hasil" class="text-white/80 hover:text-white transition">Hasil</a>
+
+          <a href="/login"
+             class="rounded-full border border-yellow-300/70 px-4 py-2 text-xs font-semibold text-yellow-100 hover:bg-yellow-300 hover:text-[#0b3c6d] transition">
+            Login
+          </a>
+          <a href="/register"
+             class="rounded-full bg-white/90 px-4 py-2 text-xs font-semibold text-[#0b3c6d] hover:bg-white transition">
+            Daftar
+          </a>
+        </div>
+      </div>
+
+      <div class="md:hidden pb-4">
+        <details class="group">
+          <summary class="list-none inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-xs font-semibold">
+            Menu
+            <span class="text-white/70 group-open:rotate-180 transition">v</span>
+          </summary>
+          <div class="mt-4 flex flex-col gap-3 text-sm">
+            <a href="/" class="text-yellow-300 font-semibold">Beranda</a>
+            <a href="/tentang" class="text-white/80 hover:text-white transition">Tentang Sistem</a>
+            <a href="/gejala" class="text-white/80 hover:text-white transition">Gejala</a>
+            <a href="/konsultasi" class="text-white/80 hover:text-white transition">Konsultasi</a>
+            <a href="/hasil" class="text-white/80 hover:text-white transition">Hasil</a>
+            <div class="flex gap-3 pt-2">
+              <a href="/login"
+                 class="flex-1 rounded-full border border-yellow-300/70 px-4 py-2 text-center text-xs font-semibold text-yellow-100 hover:bg-yellow-300 hover:text-[#0b3c6d] transition">
+                Login
+              </a>
+              <a href="/register"
+                 class="flex-1 rounded-full bg-white/90 px-4 py-2 text-center text-xs font-semibold text-[#0b3c6d] hover:bg-white transition">
+                Daftar
+              </a>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-[#0b3c6d] via-[#0f4c81] to-[#0b3c6d] text-white"></section>
+  <div class="hero-strip">
+    <h1>Konsultasi <span>Kecanduan Game Online</span></h1>
+    <p>Isi kuesioner berikut secara jujur sesuai kondisi kamu sehari-hari. Semua data bersifat rahasia.</p>
+    <div class="steps">
+      <div class="step-pill"><span class="dot">1</span> Isi kuesioner</div>
+      <div class="step-pill"><span class="dot">2</span> Sistem memproses</div>
+      <div class="step-pill"><span class="dot">3</span> Lihat hasil fuzzy</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- login warning -->
+    <div class="alert alert-rose" id="loginWarning">
+      Kamu harus login terlebih dahulu untuk mengisi kuesioner.
+      <div style="margin-top:8px">
+        <a href="/login">Klik di sini untuk login →</a>
+      </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="card" id="formCard">
+
+      <!-- petunjuk -->
+      <div class="petunjuk">
+        <div class="petunjuk-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Petunjuk Pengisian
+        </div>
+        <ul>
+          <li>Isi setiap kolom dengan <strong>angka</strong> sesuai kondisi nyata kamu.</li>
+          <li>Jika tidak pernah melakukan, isi dengan angka <strong>0</strong>.</li>
+          <li>Gunakan angka desimal jika perlu, contoh: <strong>1.5</strong> jam.</li>
+          <li>Data ini digunakan untuk perhitungan <strong>Fuzzy Tsukamoto</strong>.</li>
+        </ul>
+      </div>
+
+      <form id="konsultasiForm" onsubmit="handleSubmit(event)">
+      <!-- RESULT -->  
+      </form>
+        <!-- SUBMIT -->
+        <div class="submit-area">
+          <div class="submit-note">
+            Data kamu akan diproses menggunakan<br>metode <strong>Fuzzy Tsukamoto</strong> secara otomatis.
+          </div>
+          <button type="submit" class="btn-submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+            Kirim Konsultasi
+          </button>
+        </div>
+
+      <!-- RESULT -->
+      <div class="result-box" id="resultBox">
+        <div class="result-title">✅ Hasil Perhitungan Fuzzy Tsukamoto</div>
+        <div class="result-grid" id="resultGrid"></div>
+        <div class="result-klasifikasi">
+          <div class="kls-label">Klasifikasi Kecanduan</div>
+          <div class="kls-val" id="resultKls">—</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>© 2026 ADDICTICA — Klasifikasi Kecanduan Game Online</footer>
+
+  <script>
+    // Auth check
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (!isLoggedIn) {
+      document.getElementById("loginWarning").classList.add("show");
+      document.getElementById("formCard").style.display = "none";
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const get = id => parseFloat(document.getElementById(id).value) || 0;
+
+      const q1=get('q1'), q2=get('q2'), q3=get('q3');
+      const q4=get('q4'), q5=get('q5');
+      const q6=get('q6'), q7=get('q7'), q8=get('q8');
+      const q9=get('q9'), q10=get('q10'), q11=get('q11');
+
+      // Normalisasi setiap variabel ke 0-100
+      const durasi    = ((q1/10 + q2/12 + q3/70) / 3) * 100;
+      const frekuensi = ((q4/7  + q5/10) / 2) * 100;
+      const prestasi  = ((q6/7  + q7/30 + q8/30) / 3) * 100;
+      const topup     = ((q9/30 + q10/500 + q11/30) / 3) * 100;
+
+      // Skor akhir (rata-rata 4 variabel)
+      const skor = (durasi + frekuensi + prestasi + topup) / 4;
+
+      let kls = '';
+      if (skor < 33)      kls = 'Kecanduan Ringan';
+      else if (skor < 66) kls = 'Kecanduan Sedang';
+      else                kls = 'Kecanduan Berat';
+
+      const chips = [
+        { val: durasi.toFixed(1),    lbl: 'Durasi Bermain' },
+        { val: frekuensi.toFixed(1), lbl: 'Frekuensi Bermain' },
+        { val: prestasi.toFixed(1),  lbl: 'Penurunan Prestasi' },
+        { val: topup.toFixed(1),     lbl: 'Perilaku Top Up' },
+        { val: skor.toFixed(1),      lbl: 'Skor Akhir' },
+      ];
+
+      document.getElementById('resultGrid').innerHTML = chips.map(c =>
+        `<div class="result-chip"><div class="val">${c.val}</div><div class="lbl">${c.lbl}</div></div>`
+      ).join('');
+
+      document.getElementById('resultKls').textContent = kls;
+      const rb = document.getElementById('resultBox');
+      rb.classList.add('show');
+      rb.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  </script>
+
+</body>
+</html>

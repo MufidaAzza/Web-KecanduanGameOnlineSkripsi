@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasil Diagnosa | ADDICTICA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #0b3c6d;
+      --navy-deep: #072d52;
+      --navy-mid:  #0f4c81;
+      --gold:      #f5c842;
+      --gold-light:#fff3b0;
+      --emerald:   #059669;
+      --rose:      #e11d48;
+      --amber:     #d97706;
+      --slate-50:  #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-400: #94a3b8;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-900: #0f172a;
+      --white:     #ffffff;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-700);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      background: var(--navy);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,.25);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      text-decoration: none;
+    }
+    .brand-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--navy);
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: .85rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .brand-text p:first-child { font-size: .85rem; font-weight: 700; color: var(--white); letter-spacing: .05em; }
+    .brand-text p:last-child  { font-size: .7rem;  color: rgba(255,255,255,.6); }
+
+    .nav-links { display: flex; align-items: center; gap: 1.75rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,.75); text-decoration: none; font-size: .825rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a.active { color: var(--gold); position: relative; }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 2px; border-radius: 9999px; background: var(--gold);
+    }
+    .btn-nav-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--gold);
+      border-radius: 9999px;
+      padding: .5rem 1.4rem;
+      font-size: .82rem; font-weight: 600;
+      color: var(--gold);
+      text-decoration: none;
+      transition: all .2s;
+    }
+    .btn-nav-outline:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+    .btn-nav-solid {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      border-radius: 9999px;
+      padding: .5rem 1.5rem;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--navy);
+      text-decoration: none;
+      transition: all .2s;
+ 
+    }
+    .btn-nav-solid:hover { background: #f1f5f9; }
+
+    /* Naikkan spesifisitas agar tidak ketimpa warna default .nav-links a */
+    .nav-links a.btn-nav-outline { color: var(--gold); }
+    .nav-links a.btn-nav-outline:hover { color: var(--navy); }
+    .nav-links a.btn-nav-solid { color: var(--navy); }
+    .nav-links a.btn-nav-solid:hover { color: var(--navy); }
+
+    /* ─── HERO SECTION ─── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1a6ab1 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 3.5rem 1.5rem 4rem;
+      text-align: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-blob1 {
+      position: absolute; width: 280px; height: 280px;
+      background: rgba(245,200,66,.12);
+      border-radius: 50%;
+      top: -60px; right: -60px;
+      filter: blur(60px);
+    }
+    .hero-blob2 {
+      position: absolute; width: 200px; height: 200px;
+      background: rgba(255,255,255,.06);
+      border-radius: 50%;
+      bottom: -40px; left: -40px;
+      filter: blur(50px);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: rgba(245,200,66,.15);
+      border: 1px solid rgba(245,200,66,.3);
+      color: var(--gold);
+      border-radius: 9999px;
+      padding: .3rem .9rem;
+      font-size: .72rem; font-weight: 600;
+      letter-spacing: .04em; text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: .75rem;
+    }
+    .hero p {
+      color: rgba(255,255,255,.72);
+      font-size: .925rem;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    .hero p strong { color: var(--gold); font-weight: 600; }
+
+    /* ─── STATS STRIP ─── */
+    .stats-strip {
+      background: var(--white);
+      border-bottom: 1px solid var(--slate-200);
+    }
+    .stats-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+    .stat-item {
+      text-align: center;
+      padding: .5rem 1rem;
+      border-right: 1px solid var(--slate-200);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .stat-label { font-size: .72rem; color: var(--slate-400); font-weight: 500; margin-top: .1rem; }
+
+    /* ─── MAIN CONTENT ─── */
+    main {
+      flex: 1;
+      max-width: 820px;
+      width: 100%;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      border: 1px solid var(--slate-200);
+      box-shadow: 0 4px 24px rgba(11,60,109,.06), 0 1px 4px rgba(0,0,0,.04);
+      overflow: hidden;
+    }
+
+    /* card top accent bar */
+    .card-accent {
+      height: 5px;
+      background: linear-gradient(90deg, var(--navy), #1a6ab1, var(--gold));
+    }
+
+    .card-header {
+      padding: 1.75rem 2rem 1.5rem;
+      border-bottom: 1px solid var(--slate-100);
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .card-header-icon {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .card-header h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--slate-900);
+    }
+    .card-header p { font-size: .78rem; color: var(--slate-400); margin-top: .1rem; }
+
+    /* ─── RESULT AREA ─── */
+    #hasilContainer { padding: 1.75rem 2rem; }
+
+    /* Loading state */
+    .loading-dots {
+      display: flex; justify-content: center; align-items: center;
+      gap: .4rem; padding: 3rem 0;
+    }
+    .loading-dots span {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--slate-200);
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: .15s; }
+    .loading-dots span:nth-child(3) { animation-delay: .3s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); background: var(--slate-200); }
+      40% { transform: translateY(-8px); background: var(--navy); }
+    }
+
+    /* ─── RESULT CARD (inside hasilContainer) ─── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-chip {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: .9rem 1.1rem;
+      display: flex; flex-direction: column; gap: .3rem;
+    }
+    .info-chip .label {
+      font-size: .68rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--slate-400);
+      display: flex; align-items: center; gap: .3rem;
+    }
+    .info-chip .value {
+      font-size: .92rem; font-weight: 700; color: var(--slate-900);
+    }
+
+    /* result badge */
+    .result-badge {
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .result-badge::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v5h20v20.5h2V23h20v-5H22V.5h-2v20z' fill='%23000' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+    .result-badge .badge-label {
+      font-size: .72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; opacity: .7; margin-bottom: .5rem;
+    }
+    .result-badge .badge-value {
+      font-family: 'Sora', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      line-height: 1;
+    }
+    .result-badge .badge-sub {
+      font-size: .8rem; opacity: .7; margin-top: .5rem;
+    }
+
+    /* Color variants */
+    .badge-rendah  { background: #ecfdf5; border: 1.5px solid #6ee7b7; color: #065f46; }
+    .badge-sedang  { background: #fffbeb; border: 1.5px solid #fcd34d; color: #92400e; }
+    .badge-tinggi  { background: #fff1f2; border: 1.5px solid #fda4af; color: #9f1239; }
+    .badge-default { background: #eff6ff; border: 1.5px solid #93c5fd; color: #1e3a5f; }
+
+    /* recommendation block */
+    .reco-block {
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
+      display: flex; gap: .85rem; align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+    .reco-block.rendah  { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .reco-block.sedang  { background: #fffbeb; border: 1px solid #fde68a; }
+    .reco-block.tinggi  { background: #fff1f2; border: 1px solid #fecdd3; }
+    .reco-block.default { background: #eff6ff; border: 1px solid #bfdbfe; }
+    .reco-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: .1rem; }
+    .reco-block .reco-title { font-size: .82rem; font-weight: 700; color: var(--slate-900); margin-bottom: .25rem; }
+    .reco-block .reco-text  { font-size: .8rem; color: var(--slate-600); line-height: 1.6; }
+
+    /* ─── ACCESS RESTRICTED (not logged in) ─── */
+    .auth-gate {
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+    .auth-gate-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 2px solid #bfdbfe;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.75rem;
+      margin: 0 auto 1.25rem;
+    }
+    .auth-gate h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--slate-900);
+      margin-bottom: .5rem;
+    }
+    .auth-gate p {
+      font-size: .88rem; color: var(--slate-600);
+      max-width: 340px; margin: 0 auto 1.75rem;
+      line-height: 1.7;
+    }
+    .steps-mini {
+      display: flex; flex-direction: column; gap: .5rem;
+      max-width: 280px;
+      margin: 0 auto 2rem;
+      text-align: left;
+    }
+    .step-row {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .78rem; color: var(--slate-600);
+    }
+    .step-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--white);
+      font-size: .65rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ─── CARD ACTIONS ─── */
+    .card-actions {
+      padding: 1.25rem 2rem 2rem;
+      border-top: 1px solid var(--slate-100);
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      justify-content: center;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      color: var(--white);
+      padding: .7rem 1.5rem;
+      border-radius: 12px;
+      font-size: .85rem; font-weight: 700;
+      text-decoration: none;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(11,60,109,.22);
+      transition: all .2s;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(11,60,109,.3); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: var(--white);
+      color: var(--slate-700);
+      padding: .7rem 1.5rem;
+      border-radius: 12px;
+      font-size: .85rem; font-weight: 600;
+      text-decoration: none;
+      border: 1.5px solid var(--slate-200);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-outline:hover { background: var(--slate-50); border-color: var(--slate-300); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--navy-deep);
+      color: rgba(255,255,255,.6);
+      text-align: center;
+      padding: 1.4rem;
+      font-size: .78rem;
+    }
+    footer span { color: var(--gold); font-weight: 600; }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+    }
+    .empty-state-icon {
+      font-size: 2.5rem; margin-bottom: 1rem;
+    }
+    .empty-state h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--slate-900); margin-bottom: .45rem;
+    }
+    .empty-state p {
+      font-size: .83rem; color: var(--slate-500);
+      max-width: 300px; margin: 0 auto 1.5rem;
+      line-height: 1.65;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .info-grid { grid-template-columns: 1fr; }
+      .card-header { padding: 1.25rem 1.25rem 1rem; }
+      #hasilContainer { padding: 1.25rem; }
+      .card-actions { padding: 1rem 1.25rem 1.5rem; }
+      .stats-inner { grid-template-columns: repeat(3,1fr); gap: 0; }
+      .stat-num { font-size: 1.1rem; }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp .5s ease both; }
+    .fade-up-2 { animation: fadeUp .5s .12s ease both; }
+    .fade-up-3 { animation: fadeUp .5s .22s ease both; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="brand">
+        <div class="brand-icon">AG</div>
+        <div class="brand-text">
+          <p>ADDICTICA</p>
+          <p>Fuzzy Tsukamoto</p>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Beranda</a></li>
+        <li><a href="/tentang">Tentang Sistem</a></li>
+        <li><a href="/gejala">Gejala</a></li>
+        <li><a href="/konsultasi">Konsultasi</a></li>
+        <li><a href="/hasil" class="active">Hasil</a></li>
+        <li><a href="/login" class="btn-nav-outline">Login</a></li>
+        <li><a href="/register" class="btn-nav-solid">Daftar</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-blob1"></div>
+    <div class="hero-blob2"></div>
+    <div style="position:relative; z-index:1;">
+      <div class="hero-badge">
+        🎮  Klasifikasi Kecanduan Game Online
+      </div>
+      <h1>Hasil Diagnosa<br>Kecanduan Game Online</h1>
+      <p>Hasil klasifikasi disusun berdasarkan metode <strong>Fuzzy Tsukamoto</strong> untuk menentukan tingkat kecanduan game online secara akurat.</p>
+    </div>
+  </section>
+
+  <!-- ── STATS STRIP ── -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Tingkat Klasifikasi</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">Tsukamoto</div>
+        <div class="stat-label">Metode Fuzzy</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">Real‑time</div>
+        <div class="stat-label">Analisis Otomatis</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MAIN ── -->
+  <main>
+    <div class="card fade-up">
+      <div class="card-accent"></div>
+
+      <div class="card-header">
+        <div class="card-header-icon">📋</div>
+        <div>
+          <h2>Hasil Diagnosa Terakhir Anda</h2>
+          <p>Data diambil secara otomatis dari sesi konsultasi terbaru</p>
+        </div>
+      </div>
+
+      <!-- Dynamic result area -->
+      <div id="hasilContainer">
+        <div class="loading-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="card-actions" id="cardActions">
+        <a href="/konsultasi" class="btn-primary">🔄 Isi Ulang Konsultasi</a>
+        <a href="/" class="btn-outline">← Kembali ke Beranda</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    &copy; 2026 <span>ADDICTICA</span> — Klasifikasi Kecanduan Game Online
+  </footer>
+
+  <script>
+    const container = document.getElementById("hasilContainer");
+
+    const RECOMMENDATIONS = {
+      rendah: {
+        icon: "✅",
+        title: "Tingkat kecanduan Anda rendah – pertahankan kebiasaan baik ini!",
+        text: "Anda bermain game secara sehat dan terkontrol. Tetap jaga keseimbangan antara aktivitas digital dan kehidupan sehari-hari.",
+        cls: "rendah"
+      },
+      sedang: {
+        icon: "⚠️",
+        title: "Tingkat kecanduan Anda sedang – waspadai kebiasaan bermain Anda.",
+        text: "Pertimbangkan untuk mengatur jadwal bermain dan meningkatkan aktivitas fisik atau sosial di luar game.",
+        cls: "sedang"
+      },
+      tinggi: {
+        icon: "🚨",
+        title: "Tingkat kecanduan Anda tinggi – segera konsultasikan dengan profesional.",
+        text: "Disarankan untuk mencari bantuan konselor atau psikolog dan membatasi waktu bermain secara bertahap.",
+        cls: "tinggi"
+      },
+      default: {
+        icon: "ℹ️",
+        title: "Hasil diagnosa tersedia.",
+        text: "Silakan konsultasikan hasilnya dengan tenaga ahli jika diperlukan.",
+        cls: "default"
+      }
+    };
+
+    function getLevel(hasil) {
+      if (!hasil) return "default";
+      const l = hasil.toLowerCase();
+      if (l.includes("rendah")) return "rendah";
+      if (l.includes("sedang")) return "sedang";
+      if (l.includes("tinggi")) return "tinggi";
+      return "default";
+    }
+
+    fetch("/api/hasil")
+      .then(res => { if (!res.ok) throw new Error("Unauthorized"); return res.json(); })
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          const terbaru = data[0];
+          const level   = getLevel(terbaru.hasil);
+          const reco    = RECOMMENDATIONS[level];
+          const tanggal = new Date(terbaru.tanggal).toLocaleDateString("id-ID", { day:"numeric", month:"long", year:"numeric" });
+
+          container.innerHTML = `
+            <div class="info-grid fade-up-2">
+              <div class="info-chip">
+                <span class="label">👤 Nama Pengguna</span>
+                <span class="value">${terbaru.userId?.nama || "—"}</span>
+              </div>
+              <div class="info-chip">
+                <span class="label">📅 Tanggal Diagnosa</span>
+                <span class="value">${tanggal}</span>
+              </div>
+            </div>
+
+            <div class="result-badge badge-${level} fade-up-2">
+              <div class="badge-label">Kategori Tingkat Kecanduan</div>
+              <div class="badge-value">${terbaru.hasil}</div>
+              <div class="badge-sub">Berdasarkan Metode Fuzzy Tsukamoto</div>
+            </div>
+
+            <div class="reco-block ${reco.cls} fade-up-3">
+              <div class="reco-icon">${reco.icon}</div>
+              <div>
+                <div class="reco-title">${reco.title}</div>
+                <div class="reco-text">${reco.text}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="empty-state fade-up-2">
+              <div class="empty-state-icon">📭</div>
+              <h3>Belum Ada Hasil Diagnosa</h3>
+              <p>Anda belum pernah melakukan konsultasi. Mulai konsultasi sekarang untuk mengetahui tingkat kecanduan game Anda.</p>
+              <a href="/konsultasi" class="btn-primary">Mulai Konsultasi</a>
+            </div>
+          `;
+        }
+      })
+      .catch(() => {
+        container.innerHTML = `
+          <div class="auth-gate fade-up-2">
+            <div class="auth-gate-icon">🔒</div>
+            <h3>Akses Terbatas</h3>
+            <p>Silakan login terlebih dahulu untuk melihat hasil diagnosa pribadi Anda.</p>
+
+            <div class="steps-mini">
+              <div class="step-row"><div class="step-num">1</div><span>Klik tombol Login di bawah</span></div>
+              <div class="step-row"><div class="step-num">2</div><span>Masukkan akun Anda</span></div>
+              <div class="step-row"><div class="step-num">3</div><span>Hasil diagnosa otomatis tampil</span></div>
+            </div>
+
+            <a href="/login" class="btn-primary">🔑 Login Sekarang</a>
+          </div>
+        `;
+      });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+h2 {
+    color: #2c3e50;
+    text-align: center;
+}
+
+.question {
+    margin-bottom: 20px;
+}
+
+.question label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+.options input {
+    margin-right: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2980b9;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1f6391;
+}

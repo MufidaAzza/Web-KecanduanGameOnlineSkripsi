@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Riwayat Diagnosa | ADDICTICA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.29/dist/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "system-ui", "-apple-system", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-100 text-gray-700">
+<div class="min-h-screen bg-gray-100">
+  <div class="flex">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full lg:translate-x-0 bg-[#0b3c6d] text-white transition-transform duration-200">
+      <div class="flex items-center gap-3 px-6 py-6 border-b border-white/10">
+        <div class="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center">
+          <svg class="h-5 w-5 text-yellow-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12l2-2 4 4 8-8 4 4"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm uppercase text-white/60">Admin Panel</p>
+          <p class="text-lg font-semibold">ADDICTICA</p>
+        </div>
+      </div>
+
+      <nav class="px-4 py-6">
+        <p class="px-2 text-xs uppercase tracking-wider text-white/50">Menu Utama</p>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li>
+            <a href="/admin" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12l9-9 9 9"></path>
+                <path d="M9 21V9h6v12"></path>
+              </svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="/admin_manajemen" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+                <path d="M16 20a4 4 0 0 0-8 0"></path>
+              </svg>
+              Manajemen Admin
+            </a>
+          </li>
+          <li>
+            <a href="/admin_pengguna" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              Data Pengguna
+            </a>
+          </li>
+          <li>
+            <a href="/admin_riwayat" class="flex items-center gap-3 rounded-lg bg-white/10 px-3 py-2 text-yellow-200 font-semibold">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 7v5l3 3"></path>
+              </svg>
+              Riwayat Diagnosa
+            </a>
+          </li>
+          <li>
+            <a href="/admin_detail" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6h16"></path>
+                <path d="M4 12h16"></path>
+                <path d="M4 18h16"></path>
+              </svg>
+              Detail Hasil
+            </a>
+          </li>
+        </ul>
+
+        <div class="mt-8 border-t border-white/10 pt-4">
+          <a href="/logout" class="flex items-center gap-3 rounded-lg px-3 py-2 text-red-200 hover:text-red-100 hover:bg-white/10 transition">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <path d="M16 17l5-5-5-5"></path>
+              <path d="M21 12H9"></path>
+            </svg>
+            Logout
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- BACKDROP -->
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-black/30 opacity-0 pointer-events-none transition lg:hidden"></div>
+
+    <!-- CONTENT -->
+    <div class="flex-1 lg:ml-64">
+
+      <!-- TOPBAR -->
+      <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-200">
+        <div class="flex items-center justify-between gap-4 px-6 py-4">
+          <div class="flex items-center gap-3">
+            <button id="sidebarToggle" class="lg:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-gray-50">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18"></path>
+                <path d="M3 12h18"></path>
+                <path d="M3 18h18"></path>
+              </svg>
+            </button>
+            <div>
+              <h1 class="text-2xl font-bold text-[#0b3c6d]">Riwayat Diagnosa</h1>
+              <p class="text-xs text-gray-500">Pantau riwayat diagnosa pengguna</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="hidden md:flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3 py-2">
+              <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+              <input id="searchRiwayatTop" type="text" placeholder="Cari riwayat" class="bg-transparent text-sm outline-none placeholder:text-gray-400">
+            </div>
+            <button id="notifBtn" class="relative inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-gray-50">
+              <span class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-yellow-400"></span>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </button>
+            <div class="flex items-center gap-2 rounded-full border border-gray-200 px-2 py-1.5">
+              <div class="h-8 w-8 rounded-full bg-[#0b3c6d] text-white flex items-center justify-center text-sm font-semibold">AD</div>
+              <div class="hidden sm:block text-xs">
+                <p class="font-semibold text-gray-700">Admin</p>
+                <p class="text-gray-400">Super Admin</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="px-6 py-8 space-y-6">
+
+        <section class="bg-white shadow-sm rounded-2xl p-6 border border-gray-100">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+            <div>
+              <h2 class="text-xl font-semibold text-[#0b3c6d]">Riwayat Diagnosa User</h2>
+              <p class="text-sm text-gray-500">Telusuri hasil diagnosa berdasarkan tanggal dan kondisi.</p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <div class="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3 py-2">
+                <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                <input id="searchRiwayat" type="text" placeholder="Cari nama atau hasil" class="bg-transparent text-sm outline-none placeholder:text-gray-400">
+              </div>
+              <select id="filterHasil" class="rounded-full border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-100">
+                <option value="">Semua Hasil</option>
+                <option value="Tinggi">Kecanduan Tinggi</option>
+                <option value="Sedang">Kecanduan Sedang</option>
+                <option value="Rendah">Kecanduan Rendah</option>
+              </select>
+              <div class="flex flex-wrap gap-2">
+                <button id="exportRiwayatExcel" class="inline-flex items-center gap-1 rounded-full bg-green-100 text-green-700 px-3 py-2 text-xs font-semibold hover:bg-green-200 transition">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h10l6 6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"></path>
+                    <path d="M14 4v6h6"></path>
+                    <path d="m9 14 2 2 4-4"></path>
+                  </svg>
+                  Export Excel
+                </button>
+                <button id="exportRiwayatPdf" class="inline-flex items-center gap-1 rounded-full bg-red-100 text-red-700 px-3 py-2 text-xs font-semibold hover:bg-red-200 transition">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6"></path>
+                    <path d="M8 13h8"></path>
+                    <path d="M8 17h5"></path>
+                  </svg>
+                  Export PDF
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border border-gray-200 rounded-xl overflow-hidden">
+              <thead class="bg-gray-50 text-gray-500">
+                <tr>
+                  <th class="p-3 text-left font-medium">
+                    <button class="sort-btn flex items-center gap-2" data-key="nama" data-type="text">
+                      Nama User
+                      <span class="sort-icon text-xs text-gray-400">↕</span>
+                    </button>
+                  </th>
+                  <th class="p-3 text-left font-medium">
+                    <button class="sort-btn flex items-center gap-2" data-key="tanggalValue" data-type="number">
+                      Tanggal
+                      <span class="sort-icon text-xs text-gray-400">↕</span>
+                    </button>
+                  </th>
+                  <th class="p-3 text-left font-medium">
+                    <button class="sort-btn flex items-center gap-2" data-key="hasil" data-type="text">
+                      Hasil
+                      <span class="sort-icon text-xs text-gray-400">↕</span>
+                    </button>
+                  </th>
+                  <th class="p-3 text-center font-medium">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tabelRiwayat" class="text-gray-600"></tbody>
+            </table>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="fixed bottom-6 right-6 hidden items-center gap-2 rounded-xl px-4 py-3 text-sm text-white shadow-lg"></div>
+
+<script>
+  let riwayatData = [];
+  let filteredRiwayat = [];
+  const sortState = { key: null, dir: null, type: null };
+
+  const tabelRiwayat = document.getElementById("tabelRiwayat");
+  const searchRiwayat = document.getElementById("searchRiwayat");
+  const searchRiwayatTop = document.getElementById("searchRiwayatTop");
+  const filterHasil = document.getElementById("filterHasil");
+  const toast = document.getElementById("toast");
+  const notifBtn = document.getElementById("notifBtn");
+
+  function showToast(message, type = "info") {
+    const styles = {
+      success: "bg-green-600",
+      error: "bg-red-600",
+      info: "bg-[#0b3c6d]"
+    };
+    toast.className = `fixed bottom-6 right-6 flex items-center gap-2 rounded-xl px-4 py-3 text-sm text-white shadow-lg ${styles[type] || styles.info}`;
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+    setTimeout(() => toast.classList.add("hidden"), 2400);
+  }
+
+  function formatTanggal(dateValue) {
+    if (!dateValue) return "-";
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return "-";
+    return date.toLocaleDateString("id-ID");
+  }
+
+  function formatFileDate() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+  }
+
+  function exportExcel({ title, identityLines, headers, values, filename }) {
+    const body = Array.isArray(values[0]) ? values : [values];
+    const sheetData = [
+      [title],
+      ["Sistem: ADDICTICA"],
+      [`Tanggal Ekspor: ${new Date().toLocaleString("id-ID")}`],
+      ...identityLines.map((line) => [line]),
+      [],
+      headers,
+      ...body
+    ];
+    const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+    worksheet["!cols"] = headers.map((header) => ({ wch: Math.max(14, header.length + 4) }));
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan");
+    XLSX.writeFile(workbook, filename);
+  }
+
+  function exportPdf({ title, identityLines, headers, values, filename }) {
+    const { jsPDF } = window.jspdf;
+    const body = Array.isArray(values[0]) ? values : [values];
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text(title, 40, 50);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("Sistem: ADDICTICA", 40, 70);
+    doc.text(`Tanggal Ekspor: ${new Date().toLocaleString("id-ID")}`, 40, 86);
+    identityLines.forEach((line, idx) => {
+      doc.text(line, 40, 104 + idx * 14);
+    });
+    const startY = 124 + identityLines.length * 14;
+    doc.autoTable({
+      startY,
+      head: [headers],
+      body,
+      styles: { fontSize: 10, cellPadding: 6 },
+      headStyles: { fillColor: [11, 60, 109], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 247, 250] }
+    });
+    doc.save(filename);
+  }
+
+  function applySort(data) {
+    if (!sortState.key || !sortState.dir) return data;
+    const dir = sortState.dir === "desc" ? -1 : 1;
+    return [...data].sort((a, b) => {
+      const valA = a[sortState.key];
+      const valB = b[sortState.key];
+      if (sortState.type === "number") {
+        return (Number(valA) - Number(valB)) * dir || (a.__index - b.__index);
+      }
+      const aText = String(valA ?? "").toLowerCase();
+      const bText = String(valB ?? "").toLowerCase();
+      if (aText < bText) return -1 * dir;
+      if (aText > bText) return 1 * dir;
+      return a.__index - b.__index;
+    });
+  }
+
+  function updateSortIcons() {
+    document.querySelectorAll(".sort-btn").forEach((btn) => {
+      const icon = btn.querySelector(".sort-icon");
+      const isActive = btn.dataset.key === sortState.key && sortState.dir;
+      btn.classList.toggle("text-[#0b3c6d]", isActive);
+      if (!icon) return;
+      if (!isActive) {
+        icon.textContent = "↕";
+        icon.classList.remove("text-[#0b3c6d]");
+        icon.classList.add("text-gray-400");
+        return;
+      }
+      icon.textContent = sortState.dir === "asc" ? "↑" : "↓";
+      icon.classList.remove("text-gray-400");
+      icon.classList.add("text-[#0b3c6d]");
+    });
+  }
+
+  function handleSortClick(event) {
+    const btn = event.currentTarget;
+    const key = btn.dataset.key;
+    const type = btn.dataset.type;
+    if (sortState.key !== key) {
+      sortState.key = key;
+      sortState.type = type;
+      sortState.dir = "asc";
+    } else if (sortState.dir === "asc") {
+      sortState.dir = "desc";
+    } else if (sortState.dir === "desc") {
+      sortState.key = null;
+      sortState.type = null;
+      sortState.dir = null;
+    } else {
+      sortState.dir = "asc";
+    }
+    updateSortIcons();
+    renderRiwayat();
+  }
+
+  async function loadRiwayat() {
+    try {
+      const res = await fetch("/api/hasil/admin");
+      if (!res.ok) throw new Error("Gagal memuat data");
+      const data = await res.json();
+      riwayatData = data.map((item, index) => ({
+        __index: index,
+        id: item._id,
+        nama: item.userId ? item.userId.nama : "-",
+        tanggal: formatTanggal(item.tanggal),
+        tanggalValue: item.tanggal ? new Date(item.tanggal).getTime() : 0,
+        hasil: item.hasil
+      }));
+      renderRiwayat();
+      updateSortIcons();
+    } catch (error) {
+      showToast("Gagal memuat riwayat", "error");
+    }
+  }
+
+  function renderRiwayat() {
+    const query = searchRiwayat.value.toLowerCase();
+    const hasilFilter = filterHasil.value;
+
+    const filtered = riwayatData
+      .map((item, index) => ({ item, index }))
+      .filter(({ item }) => {
+        const matchQuery = item.nama.toLowerCase().includes(query) || item.hasil.toLowerCase().includes(query);
+      const matchFilter = hasilFilter ? item.hasil.toLowerCase().includes(hasilFilter.toLowerCase()) : true;
+        return matchQuery && matchFilter;
+      });
+    filteredRiwayat = applySort(filtered.map(({ item }) => item));
+
+    tabelRiwayat.innerHTML = "";
+
+    if (filteredRiwayat.length === 0) {
+      tabelRiwayat.innerHTML = `
+        <tr class="border-t">
+          <td class="p-4 text-center text-sm text-gray-400" colspan="4">Tidak ada data ditemukan.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    filteredRiwayat.forEach((item) => {
+      const hasilClass = item.hasil.includes("Tinggi")
+        ? "text-red-600"
+        : item.hasil.includes("Sedang")
+        ? "text-yellow-600"
+        : "text-green-600";
+
+      tabelRiwayat.innerHTML += `
+        <tr class="border-t hover:bg-gray-50 transition">
+          <td class="p-3">${item.nama}</td>
+          <td class="p-3">${item.tanggal}</td>
+          <td class="p-3 font-semibold ${hasilClass}">${item.hasil}</td>
+          <td class="p-3 text-center">
+            <div class="flex flex-wrap justify-center gap-2">
+              <button onclick="hapusRiwayat('${item.id}')" class="inline-flex items-center gap-1 rounded-full bg-red-50 text-red-600 px-3 py-1 text-xs font-semibold hover:bg-red-200 transition">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18"></path>
+                  <path d="M8 6V4h8v2"></path>
+                  <path d="M19 6l-1 14H6L5 6"></path>
+                  <path d="M10 11v6"></path>
+                  <path d="M14 11v6"></path>
+                </svg>
+                Hapus
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  function downloadRiwayatExcel() {
+    if (!filteredRiwayat.length) {
+      showToast("Tidak ada data untuk diekspor", "error");
+      return;
+    }
+    const headers = ["Nama User", "Tanggal", "Hasil Diagnosa"];
+    const values = filteredRiwayat.map((item) => [item.nama, item.tanggal, item.hasil]);
+    exportExcel({
+      title: "Rekap Riwayat Diagnosa",
+      identityLines: [`Total Data: ${filteredRiwayat.length}`],
+      headers,
+      values,
+      filename: `rekap-riwayat_${formatFileDate()}.xlsx`
+    });
+  }
+
+  function downloadRiwayatPdf() {
+    if (!filteredRiwayat.length) {
+      showToast("Tidak ada data untuk diekspor", "error");
+      return;
+    }
+    const headers = ["Nama User", "Tanggal", "Hasil Diagnosa"];
+    const values = filteredRiwayat.map((item) => [item.nama, item.tanggal, item.hasil]);
+    exportPdf({
+      title: "Rekap Riwayat Diagnosa",
+      identityLines: [`Total Data: ${filteredRiwayat.length}`],
+      headers,
+      values,
+      filename: `rekap-riwayat_${formatFileDate()}.pdf`
+    });
+  }
+
+  async function hapusRiwayat(id) {
+    if (!confirm("Yakin ingin menghapus data ini?")) return;
+
+    try {
+      const res = await fetch(`/api/hasil/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Gagal menghapus data");
+      }
+      showToast("Riwayat berhasil dihapus", "info");
+      loadRiwayat();
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  }
+
+  searchRiwayat.addEventListener("input", renderRiwayat);
+  searchRiwayatTop.addEventListener("input", () => {
+    searchRiwayat.value = searchRiwayatTop.value;
+    renderRiwayat();
+  });
+  filterHasil.addEventListener("change", renderRiwayat);
+  document.querySelectorAll(".sort-btn").forEach((btn) => btn.addEventListener("click", handleSortClick));
+  document.getElementById("exportRiwayatExcel").addEventListener("click", downloadRiwayatExcel);
+  document.getElementById("exportRiwayatPdf").addEventListener("click", downloadRiwayatPdf);
+  notifBtn.addEventListener("click", () => showToast("Tidak ada notifikasi baru", "info"));
+  loadRiwayat();
+
+  const sidebar = document.getElementById("sidebar");
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+
+  function openSidebar() {
+    sidebar.classList.remove("-translate-x-full");
+    sidebarBackdrop.classList.remove("opacity-0", "pointer-events-none");
+  }
+
+  function closeSidebar() {
+    sidebar.classList.add("-translate-x-full");
+    sidebarBackdrop.classList.add("opacity-0", "pointer-events-none");
+  }
+
+  sidebarToggle.addEventListener("click", openSidebar);
+  sidebarBackdrop.addEventListener("click", closeSidebar);
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 1024) {
+      sidebar.classList.remove("-translate-x-full");
+      sidebarBackdrop.classList.add("opacity-0", "pointer-events-none");
+    } else {
+      sidebar.classList.add("-translate-x-full");
+    }
+  });
+</script>
+
+</body>
+</html>
+
+

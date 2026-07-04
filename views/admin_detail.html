@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Detail Hasil | ADDICTICA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.29/dist/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "system-ui", "-apple-system", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-100 text-gray-700">
+<div class="min-h-screen bg-gray-100">
+  <div class="flex">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full lg:translate-x-0 bg-[#0b3c6d] text-white transition-transform duration-200">
+      <div class="flex items-center gap-3 px-6 py-6 border-b border-white/10">
+        <div class="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center">
+          <svg class="h-5 w-5 text-yellow-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12l2-2 4 4 8-8 4 4"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm uppercase text-white/60">Admin Panel</p>
+          <p class="text-lg font-semibold">ADDICTICA</p>
+        </div>
+      </div>
+
+      <nav class="px-4 py-6">
+        <p class="px-2 text-xs uppercase tracking-wider text-white/50">Menu Utama</p>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li>
+            <a href="/admin" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12l9-9 9 9"></path>
+                <path d="M9 21V9h6v12"></path>
+              </svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="/admin_manajemen" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+                <path d="M16 20a4 4 0 0 0-8 0"></path>
+              </svg>
+              Manajemen Admin
+            </a>
+          </li>
+          <li>
+            <a href="/admin_pengguna" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              Data Pengguna
+            </a>
+          </li>
+          <li>
+            <a href="/admin_riwayat" class="flex items-center gap-3 rounded-lg px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 7v5l3 3"></path>
+              </svg>
+              Riwayat Diagnosa
+            </a>
+          </li>
+          <li>
+            <a href="/admin_detail" class="flex items-center gap-3 rounded-lg bg-white/10 px-3 py-2 text-yellow-200 font-semibold">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6h16"></path>
+                <path d="M4 12h16"></path>
+                <path d="M4 18h16"></path>
+              </svg>
+              Detail Hasil
+            </a>
+          </li>
+        </ul>
+
+        <div class="mt-8 border-t border-white/10 pt-4">
+          <a href="/logout" class="flex items-center gap-3 rounded-lg px-3 py-2 text-red-200 hover:text-red-100 hover:bg-white/10 transition">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <path d="M16 17l5-5-5-5"></path>
+              <path d="M21 12H9"></path>
+            </svg>
+            Logout
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- BACKDROP -->
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-black/30 opacity-0 pointer-events-none transition lg:hidden"></div>
+
+    <!-- CONTENT -->
+    <div class="flex-1 lg:ml-64">
+
+      <!-- TOPBAR -->
+      <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-200">
+        <div class="flex items-center justify-between gap-4 px-6 py-4">
+          <div class="flex items-center gap-3">
+            <button id="sidebarToggle" class="lg:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-gray-50">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18"></path>
+                <path d="M3 12h18"></path>
+                <path d="M3 18h18"></path>
+              </svg>
+            </button>
+            <div>
+              <h1 class="text-2xl font-bold text-[#0b3c6d]">Detail Hasil Diagnosa</h1>
+              <p class="text-xs text-gray-500">Ringkasan detail hasil konsultasi pengguna</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <button id="notifBtn" class="relative inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-gray-50">
+              <span class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-yellow-400"></span>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </button>
+            <div class="flex items-center gap-2 rounded-full border border-gray-200 px-2 py-1.5">
+              <div class="h-8 w-8 rounded-full bg-[#0b3c6d] text-white flex items-center justify-center text-sm font-semibold">AD</div>
+              <div class="hidden sm:block text-xs">
+                <p class="font-semibold text-gray-700">Admin</p>
+                <p class="text-gray-400">Super Admin</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="px-6 py-8 space-y-6">
+
+        <section class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="xl:col-span-2 bg-white shadow-sm rounded-2xl p-6 border border-gray-100">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+              <div>
+                <h2 class="text-xl font-semibold text-[#0b3c6d]">Daftar User & Hasil Terakhir</h2>
+                <p class="text-sm text-gray-500">Menampilkan seluruh user beserta hasil diagnosa terbaru.</p>
+              </div>
+              <div class="flex flex-col lg:flex-row lg:items-center lg:justify-end gap-3">
+                <div class="flex flex-1 flex-col sm:flex-row sm:items-center gap-3">
+                  <div class="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm focus-within:ring-2 focus-within:ring-blue-100 transition">
+                    <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                    <input id="searchDetail" type="text" placeholder="Cari nama atau email" class="w-52 bg-transparent text-sm outline-none placeholder:text-gray-400 sm:w-64">
+                  </div>
+                  <div class="relative">
+                    <select id="filterDetail" class="w-full appearance-none rounded-lg border border-gray-200 bg-white px-3 py-2 pr-9 text-sm outline-none shadow-sm focus:ring-2 focus:ring-blue-100">
+                      <option value="">Semua Hasil</option>
+                      <option value="Tinggi">Tinggi</option>
+                      <option value="Sedang">Sedang</option>
+                      <option value="Rendah">Rendah</option>
+                    </select>
+                    <svg class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button id="exportDetailExcel" class="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-green-700 transition">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h10l6 6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"></path>
+                      <path d="M14 4v6h6"></path>
+                      <path d="m9 14 2 2 4-4"></path>
+                    </svg>
+                    Export Excel
+                  </button>
+                  <button id="exportDetailPdf" class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-red-700 transition">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <path d="M14 2v6h6"></path>
+                      <path d="M8 13h8"></path>
+                      <path d="M8 17h5"></path>
+                    </svg>
+                    Export PDF
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm border border-gray-200 rounded-xl overflow-hidden">
+                <thead class="bg-gray-50 text-gray-500">
+                  <tr>
+                    <th class="p-3 text-left font-medium">
+                      <button class="sort-btn flex items-center gap-2" data-key="nama" data-type="text">
+                        Nama
+                        <span class="sort-icon text-xs text-gray-400">↕</span>
+                      </button>
+                    </th>
+                    <th class="p-3 text-left font-medium">
+                      <button class="sort-btn flex items-center gap-2" data-key="email" data-type="text">
+                        Email
+                        <span class="sort-icon text-xs text-gray-400">↕</span>
+                      </button>
+                    </th>
+                    <th class="p-3 text-left font-medium">
+                      <button class="sort-btn flex items-center gap-2" data-key="hasil" data-type="text">
+                        Hasil Terakhir
+                        <span class="sort-icon text-xs text-gray-400">↕</span>
+                      </button>
+                    </th>
+                    <th class="p-3 text-left font-medium">
+                      <button class="sort-btn flex items-center gap-2" data-key="tanggalValue" data-type="number">
+                        Tanggal
+                        <span class="sort-icon text-xs text-gray-400">↕</span>
+                      </button>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="detailTable" class="text-gray-600"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-white shadow-sm rounded-2xl p-6 border border-gray-100">
+            <h3 class="text-lg font-semibold text-[#0b3c6d]">Rekomendasi Umum</h3>
+            <p class="text-sm text-gray-500 mt-2 leading-relaxed">
+              Gunakan informasi hasil terakhir sebagai acuan untuk memberikan tindak lanjut
+              pada pengguna dengan tingkat kecanduan tinggi atau sedang.
+            </p>
+            <div class="mt-4 flex flex-col gap-2 text-sm">
+              <div class="flex items-center gap-2 rounded-lg bg-green-50 px-3 py-2 text-green-700">
+                <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                Pantau user dengan hasil tinggi secara berkala
+              </div>
+              <div class="flex items-center gap-2 rounded-lg bg-yellow-50 px-3 py-2 text-yellow-700">
+                <span class="h-2 w-2 rounded-full bg-yellow-500"></span>
+                Berikan edukasi dan saran kegiatan alternatif
+              </div>
+              <div class="flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-blue-700">
+                <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+                Jadwalkan konsultasi lanjutan bila diperlukan
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="fixed bottom-6 right-6 hidden items-center gap-2 rounded-xl px-4 py-3 text-sm text-white shadow-lg"></div>
+
+<script>
+  const toast = document.getElementById("toast");
+  const notifBtn = document.getElementById("notifBtn");
+  const detailTable = document.getElementById("detailTable");
+  const searchDetail = document.getElementById("searchDetail");
+  const filterDetail = document.getElementById("filterDetail");
+  const sidebar = document.getElementById("sidebar");
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+
+  let detailUsers = [];
+  let detailHasil = [];
+  let mappedDetails = [];
+  let filteredDetails = [];
+  const sortState = { key: null, dir: null, type: null };
+
+  function showToast(message, type = "info") {
+    const styles = {
+      success: "bg-green-600",
+      error: "bg-red-600",
+      info: "bg-[#0b3c6d]"
+    };
+    toast.className = `fixed bottom-6 right-6 flex items-center gap-2 rounded-xl px-4 py-3 text-sm text-white shadow-lg ${styles[type] || styles.info}`;
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+    setTimeout(() => toast.classList.add("hidden"), 2400);
+  }
+
+  function parseTingkatFromHasil(hasilText) {
+    if (!hasilText) return "Belum";
+    const lower = hasilText.toLowerCase();
+    if (lower.includes("tinggi")) return "Tinggi";
+    if (lower.includes("sedang")) return "Sedang";
+    if (lower.includes("rendah")) return "Rendah";
+    return "Belum";
+  }
+
+  function formatTanggal(dateValue) {
+    if (!dateValue) return "-";
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return "-";
+    return date.toLocaleDateString("id-ID");
+  }
+
+  function applySort(data) {
+    if (!sortState.key || !sortState.dir) return data;
+    const dir = sortState.dir === "desc" ? -1 : 1;
+    return [...data].sort((a, b) => {
+      const valA = a[sortState.key];
+      const valB = b[sortState.key];
+      if (sortState.type === "number") {
+        return (Number(valA) - Number(valB)) * dir || (a.__index - b.__index);
+      }
+      const aText = String(valA ?? "").toLowerCase();
+      const bText = String(valB ?? "").toLowerCase();
+      if (aText < bText) return -1 * dir;
+      if (aText > bText) return 1 * dir;
+      return a.__index - b.__index;
+    });
+  }
+
+  function updateSortIcons() {
+    document.querySelectorAll(".sort-btn").forEach((btn) => {
+      const icon = btn.querySelector(".sort-icon");
+      const isActive = btn.dataset.key === sortState.key && sortState.dir;
+      btn.classList.toggle("text-[#0b3c6d]", isActive);
+      if (!icon) return;
+      if (!isActive) {
+        icon.textContent = "↕";
+        icon.classList.remove("text-[#0b3c6d]");
+        icon.classList.add("text-gray-400");
+        return;
+      }
+      icon.textContent = sortState.dir === "asc" ? "↑" : "↓";
+      icon.classList.remove("text-gray-400");
+      icon.classList.add("text-[#0b3c6d]");
+    });
+  }
+
+  function handleSortClick(event) {
+    const btn = event.currentTarget;
+    const key = btn.dataset.key;
+    const type = btn.dataset.type;
+    if (sortState.key !== key) {
+      sortState.key = key;
+      sortState.type = type;
+      sortState.dir = "asc";
+    } else if (sortState.dir === "asc") {
+      sortState.dir = "desc";
+    } else if (sortState.dir === "desc") {
+      sortState.key = null;
+      sortState.type = null;
+      sortState.dir = null;
+    } else {
+      sortState.dir = "asc";
+    }
+    updateSortIcons();
+    renderDetailTable();
+  }
+
+  function formatFileDate() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+  }
+
+  function exportExcel({ title, identityLines, headers, values, filename }) {
+    const body = Array.isArray(values[0]) ? values : [values];
+    const sheetData = [
+      [title],
+      ["Sistem: ADDICTICA"],
+      [`Tanggal Ekspor: ${new Date().toLocaleString("id-ID")}`],
+      ...identityLines.map((line) => [line]),
+      [],
+      headers,
+      ...body
+    ];
+    const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+    worksheet["!cols"] = headers.map((header) => ({ wch: Math.max(14, header.length + 4) }));
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan");
+    XLSX.writeFile(workbook, filename);
+  }
+
+  function exportPdf({ title, identityLines, headers, values, filename }) {
+    const { jsPDF } = window.jspdf;
+    const body = Array.isArray(values[0]) ? values : [values];
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text(title, 40, 50);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("Sistem: ADDICTICA", 40, 70);
+    doc.text(`Tanggal Ekspor: ${new Date().toLocaleString("id-ID")}`, 40, 86);
+    identityLines.forEach((line, idx) => {
+      doc.text(line, 40, 104 + idx * 14);
+    });
+    const startY = 124 + identityLines.length * 14;
+    doc.autoTable({
+      startY,
+      head: [headers],
+      body,
+      styles: { fontSize: 10, cellPadding: 6 },
+      headStyles: { fillColor: [11, 60, 109], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 247, 250] }
+    });
+    doc.save(filename);
+  }
+
+  async function loadDetailData() {
+    try {
+      const [usersRes, hasilRes] = await Promise.all([
+        fetch("/api/users"),
+        fetch("/api/hasil/admin")
+      ]);
+
+      if (!usersRes.ok || !hasilRes.ok) {
+        throw new Error("Gagal memuat data");
+      }
+
+      detailUsers = await usersRes.json();
+      detailHasil = await hasilRes.json();
+
+      const latestByUser = new Map();
+      detailHasil.forEach((item) => {
+        const userId = item.userId && item.userId._id ? item.userId._id : item.userId;
+        if (userId && !latestByUser.has(userId)) {
+          latestByUser.set(userId, item);
+        }
+      });
+
+      mappedDetails = detailUsers.map((user, index) => {
+        const latest = latestByUser.get(user._id);
+        return {
+          __index: index,
+          nama: user.nama,
+          email: user.email,
+          hasil: latest ? latest.hasil : "Belum ada",
+          tingkat: parseTingkatFromHasil(latest ? latest.hasil : ""),
+          tanggal: latest ? formatTanggal(latest.tanggal) : "-",
+          tanggalValue: latest && latest.tanggal ? new Date(latest.tanggal).getTime() : 0
+        };
+      });
+
+      renderDetailTable();
+      updateSortIcons();
+    } catch (error) {
+      showToast("Gagal memuat data detail", "error");
+    }
+  }
+
+  function renderDetailTable() {
+    const query = searchDetail.value.toLowerCase();
+    const filter = filterDetail.value;
+
+    const filtered = mappedDetails.filter((item) => {
+      const matchQuery = item.nama.toLowerCase().includes(query) || item.email.toLowerCase().includes(query);
+      const matchFilter = filter ? item.tingkat === filter : true;
+      return matchQuery && matchFilter;
+    });
+    filteredDetails = applySort(filtered);
+
+    detailTable.innerHTML = "";
+
+    if (filtered.length === 0) {
+      detailTable.innerHTML = `
+        <tr class="border-t">
+          <td class="p-4 text-center text-sm text-gray-400" colspan="4">Tidak ada data ditemukan.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    filteredDetails.forEach((item) => {
+      const hasilClass = item.tingkat === "Tinggi"
+        ? "text-red-600"
+        : item.tingkat === "Sedang"
+        ? "text-yellow-600"
+        : item.tingkat === "Rendah"
+        ? "text-green-600"
+        : "text-gray-500";
+
+      detailTable.innerHTML += `
+        <tr class="border-t hover:bg-gray-50 transition">
+          <td class="p-3">${item.nama}</td>
+          <td class="p-3">${item.email}</td>
+          <td class="p-3 font-semibold ${hasilClass}">${item.hasil}</td>
+          <td class="p-3">${item.tanggal}</td>
+        </tr>
+      `;
+    });
+  }
+
+  function downloadDetailExcel() {
+    if (!filteredDetails.length) {
+      showToast("Tidak ada data untuk diekspor", "error");
+      return;
+    }
+    const headers = ["Nama", "Email", "Hasil Terakhir", "Tanggal"];
+    const values = filteredDetails.map((item) => [item.nama, item.email, item.hasil, item.tanggal]);
+    exportExcel({
+      title: "Rekap Detail Hasil",
+      identityLines: [`Total Data: ${filteredDetails.length}`],
+      headers,
+      values,
+      filename: `rekap-detail_${formatFileDate()}.xlsx`
+    });
+  }
+
+  function downloadDetailPdf() {
+    if (!filteredDetails.length) {
+      showToast("Tidak ada data untuk diekspor", "error");
+      return;
+    }
+    const headers = ["Nama", "Email", "Hasil Terakhir", "Tanggal"];
+    const values = filteredDetails.map((item) => [item.nama, item.email, item.hasil, item.tanggal]);
+    exportPdf({
+      title: "Rekap Detail Hasil",
+      identityLines: [`Total Data: ${filteredDetails.length}`],
+      headers,
+      values,
+      filename: `rekap-detail_${formatFileDate()}.pdf`
+    });
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("-translate-x-full");
+    sidebarBackdrop.classList.remove("opacity-0", "pointer-events-none");
+  }
+
+  function closeSidebar() {
+    sidebar.classList.add("-translate-x-full");
+    sidebarBackdrop.classList.add("opacity-0", "pointer-events-none");
+  }
+
+  sidebarToggle.addEventListener("click", openSidebar);
+  sidebarBackdrop.addEventListener("click", closeSidebar);
+  searchDetail.addEventListener("input", renderDetailTable);
+  filterDetail.addEventListener("change", renderDetailTable);
+  document.querySelectorAll(".sort-btn").forEach((btn) => btn.addEventListener("click", handleSortClick));
+  document.getElementById("exportDetailExcel").addEventListener("click", downloadDetailExcel);
+  document.getElementById("exportDetailPdf").addEventListener("click", downloadDetailPdf);
+  notifBtn.addEventListener("click", () => showToast("Tidak ada notifikasi baru", "info"));
+  loadDetailData();
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 1024) {
+      sidebar.classList.remove("-translate-x-full");
+      sidebarBackdrop.classList.add("opacity-0", "pointer-events-none");
+    } else {
+      sidebar.classList.add("-translate-x-full");
+    }
+  });
+</script>
+
+</body>
+</html>
+
+

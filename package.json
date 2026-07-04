@@ -1,0 +1,22 @@
+{
+  "name": "project-fuzzy-tsukamoto",
+  "version": "1.0.0",
+  "description": "Sistem Penentuan Tingkat Kecanduan Game Online Menggunakan Fuzzy Tsukamoto",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Mufida",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-mongo": "^5.1.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^4.0.1",
+    "express": "^4.22.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.2.1",
+    "multer": "^2.0.2"
+  }
+}

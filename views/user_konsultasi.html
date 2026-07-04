@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konsultasi | ADDICTICA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #0b3c6d;
+      --navy-deep:  #072d52;
+      --navy-mid:   #0f4c81;
+      --navy-light: #e8f0f9;
+      --gold:       #f5c842;
+      --gold-muted: #fef3c7;
+      --emerald:    #059669;
+      --emerald-bg: #ecfdf5;
+      --amber:      #d97706;
+      --amber-bg:   #fffbeb;
+      --rose:       #e11d48;
+      --rose-bg:    #fff1f2;
+      --slate-50:   #f8fafc;
+      --slate-100:  #f1f5f9;
+      --slate-200:  #e2e8f0;
+      --slate-300:  #cbd5e1;
+      --slate-400:  #94a3b8;
+      --slate-500:  #64748b;
+      --slate-600:  #475569;
+      --slate-700:  #334155;
+      --slate-800:  #1e293b;
+      --slate-900:  #0f172a;
+      --white:      #ffffff;
+      --sidebar-w:  260px;
+      --header-h:   64px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-700);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ═══════ TOPBAR ═══════ */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: var(--navy);
+      z-index: 200;
+      display: flex; align-items: center;
+      padding: 0 1.5rem; gap: 1rem;
+      box-shadow: 0 2px 16px rgba(0,0,0,.2);
+    }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: .4rem; border-radius: 8px; transition: background .15s;
+    }
+    .hamburger:hover { background: rgba(255,255,255,.1); }
+    .hamburger span { display: block; width: 20px; height: 2px; background: var(--white); border-radius: 2px; transition: all .25s; }
+
+    .topbar-brand { display: flex; align-items: center; gap: .65rem; text-decoration: none; flex: 1; }
+    .brand-logo {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: var(--white); color: var(--navy);
+      font-family: 'Sora', sans-serif; font-weight: 800; font-size: .75rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .brand-name { font-size: .9rem; font-weight: 700; color: var(--white); letter-spacing: .04em; }
+    .brand-sub  { font-size: .65rem; color: rgba(255,255,255,.55); margin-top: 1px; }
+
+    .topbar-right { display: flex; align-items: center; gap: .75rem; }
+    .topbar-user { display: flex; align-items: center; gap: .5rem; font-size: .78rem; color: rgba(255,255,255,.8); }
+
+    /* ── TOPBAR AVATAR: foto + inisial sama seperti sidebar ── */
+    .topbar-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      border: 2px solid rgba(255,255,255,.3);
+      overflow: hidden; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .topbar-avatar img {
+      width: 100%; height: 100%; object-fit: cover;
+      position: absolute; inset: 0;
+      display: none; /* controlled by JS */
+    }
+    .topbar-avatar-initial {
+      color: var(--white); font-weight: 700; font-size: .8rem;
+      line-height: 1;
+    }
+
+    .topbar-username { font-weight: 600; color: var(--white); }
+    .btn-logout {
+      display: inline-flex; align-items: center; gap: .35rem;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+      color: var(--white); padding: .38rem .9rem; border-radius: 8px;
+      font-size: .75rem; font-weight: 600; text-decoration: none; cursor: pointer;
+      transition: all .18s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.35); }
+
+    /* ═══════ LAYOUT ═══════ */
+    .layout { display: flex; margin-top: var(--header-h); min-height: calc(100vh - var(--header-h)); }
+
+    /* ═══════ SIDEBAR ═══════ */
+    .sidebar {
+      width: var(--sidebar-w); flex-shrink: 0;
+      background: var(--white); border-right: 1px solid var(--slate-200);
+      position: fixed; top: var(--header-h); bottom: 0; left: 0;
+      overflow-y: auto; z-index: 100;
+      display: flex; flex-direction: column; transition: transform .25s ease;
+    }
+    .sidebar-profile { padding: 1.75rem 1.25rem 1.25rem; border-bottom: 1px solid var(--slate-100); text-align: center; }
+    .profile-avatar-wrap { position: relative; display: inline-block; margin-bottom: .85rem; }
+
+    /* foto + inisial sidebar */
+    .profile-avatar-box {
+      width: 72px; height: 72px; border-radius: 50%;
+      border: 3px solid var(--navy);
+      overflow: hidden; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(11,60,109,.2);
+    }
+    .profile-avatar-box img {
+      width: 100%; height: 100%; object-fit: cover;
+      position: absolute; inset: 0;
+      display: none; /* controlled by JS */
+    }
+    .profile-initials {
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      width: 100%; height: 100%;
+      color: var(--white); font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .profile-badge { position: absolute; bottom: 2px; right: 2px; width: 16px; height: 16px; background: #22c55e; border: 2px solid var(--white); border-radius: 50%; }
+    .profile-name { font-family: 'Sora', sans-serif; font-size: .92rem; font-weight: 700; color: var(--slate-900); margin-bottom: .2rem; }
+    .profile-email { font-size: .7rem; color: var(--slate-400); }
+    .profile-role { display: inline-flex; align-items: center; gap: .3rem; margin-top: .5rem; background: var(--navy-light); color: var(--navy); font-size: .65rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: .2rem .65rem; border-radius: 9999px; }
+
+    .sidebar-nav { padding: 1rem .85rem; flex: 1; }
+    .nav-section-label { font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--slate-400); padding: .5rem .5rem .35rem; margin-top: .5rem; }
+    .nav-item { display: flex; align-items: center; gap: .65rem; padding: .65rem .75rem; border-radius: 10px; text-decoration: none; font-size: .82rem; font-weight: 500; color: var(--slate-600); transition: all .15s; margin-bottom: .15rem; position: relative; }
+    .nav-item:hover { background: var(--slate-50); color: var(--slate-800); }
+    .nav-item.active { background: linear-gradient(135deg, var(--navy), var(--navy-mid)); color: var(--white); font-weight: 600; box-shadow: 0 4px 12px rgba(11,60,109,.22); }
+    .nav-item .nav-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .9rem; flex-shrink: 0; background: rgba(255,255,255,.15); }
+    .nav-item:not(.active) .nav-icon { background: var(--slate-100); }
+    .nav-item .nav-label { flex: 1; }
+    .nav-item .nav-arrow { font-size: .7rem; opacity: .5; transition: transform .15s; }
+    .nav-item:hover .nav-arrow { transform: translateX(2px); opacity: .8; }
+
+    .sidebar-footer { padding: .85rem 1rem 1.25rem; border-top: 1px solid var(--slate-100); }
+    .sidebar-footer a { display: flex; align-items: center; gap: .55rem; font-size: .78rem; color: var(--slate-500); text-decoration: none; padding: .5rem .5rem; border-radius: 8px; transition: all .15s; }
+    .sidebar-footer a:hover { background: var(--rose-bg); color: var(--rose); }
+
+    /* ═══════ MAIN CONTENT ═══════ */
+    .main-content { flex: 1; margin-left: var(--sidebar-w); padding: 2rem; min-width: 0; }
+
+    /* ═══════ KONSULTASI WRAPPER ═══════ */
+    .konsultasi-wrapper {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: 20px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.04), 0 4px 24px rgba(0,0,0,.04);
+      overflow: hidden;
+    }
+
+    /* header banner */
+    .konsultasi-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 70%, #1a6db5 100%);
+      padding: 2rem 2.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .konsultasi-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .konsultasi-header-blob {
+      position: absolute; width: 220px; height: 220px;
+      background: rgba(245,200,66,.18); border-radius: 50%;
+      top: -70px; right: -50px; filter: blur(55px); pointer-events: none;
+    }
+    .konsultasi-header-inner { position: relative; z-index: 1; }
+    .kh-eyebrow {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(255,255,255,.65); margin-bottom: .6rem;
+    }
+    .kh-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+    .konsultasi-header h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.25rem, 3vw, 1.65rem);
+      font-weight: 700; color: var(--white); margin-bottom: .4rem; line-height: 1.25;
+    }
+    .konsultasi-header h1 span { color: var(--gold); }
+    .konsultasi-header p { font-size: .8rem; color: rgba(255,255,255,.65); }
+
+    /* progress tracker */
+    .progress-tracker {
+      display: flex; align-items: center; gap: 0;
+      padding: 1.25rem 2.25rem;
+      border-bottom: 1px solid var(--slate-100);
+      background: var(--slate-50);
+      overflow-x: auto;
+    }
+    .pt-step { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
+    .pt-circle {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 2px solid var(--slate-300);
+      background: var(--white); color: var(--slate-400);
+      font-size: .68rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s; flex-shrink: 0;
+    }
+    .pt-circle.done { background: var(--emerald); border-color: var(--emerald); color: var(--white); }
+    .pt-circle.current { background: var(--navy); border-color: var(--navy); color: var(--white); }
+    .pt-label { font-size: .65rem; font-weight: 600; color: var(--slate-400); margin-left: .4rem; white-space: nowrap; }
+    .pt-label.current { color: var(--navy); }
+    .pt-line { width: 28px; height: 2px; background: var(--slate-200); margin: 0 .3rem; flex-shrink: 0; }
+    .pt-line.done { background: var(--emerald); }
+
+    /* petunjuk */
+    .petunjuk-box {
+      margin: 1.75rem 2.25rem 0;
+      background: var(--navy-light);
+      border: 1px solid #c7d9f0;
+      border-radius: 12px;
+      padding: 1rem 1.35rem;
+      display: flex; gap: .85rem; align-items: flex-start;
+    }
+    .petunjuk-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: .1rem; }
+    .petunjuk-title { font-size: .8rem; font-weight: 700; color: var(--navy); margin-bottom: .2rem; }
+    .petunjuk-text { font-size: .77rem; color: var(--slate-600); line-height: 1.6; }
+
+    /* form body */
+    .form-body { padding: 1.75rem 2.25rem 2rem; }
+
+    /* section group */
+    .q-section-label {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--slate-400);
+      margin: 1.75rem 0 1rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px dashed var(--slate-200);
+    }
+    .q-section-label:first-child { margin-top: 0; }
+    .q-section-label .qs-badge {
+      background: var(--navy-light); color: var(--navy);
+      font-size: .6rem; font-weight: 700; padding: .15rem .5rem; border-radius: 9999px;
+    }
+
+    /* question card */
+    .q-card {
+      background: var(--white);
+      border: 1.5px solid var(--slate-200);
+      border-radius: 14px;
+      padding: 1.25rem 1.35rem;
+      margin-bottom: .9rem;
+      display: flex; align-items: center; gap: 1.25rem;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .q-card:hover { border-color: #bdd4ef; box-shadow: 0 2px 12px rgba(11,60,109,.06); }
+    .q-card.invalid { border-color: #fda4af; background: #fff8f9; box-shadow: 0 0 0 3px rgba(225,29,72,.07); }
+
+    .q-num {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: var(--navy-light); color: var(--navy);
+      font-family: 'Sora', sans-serif; font-size: .78rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .q-content { flex: 1; min-width: 0; }
+    .q-text { font-size: .85rem; font-weight: 600; color: var(--slate-800); margin-bottom: .2rem; line-height: 1.5; }
+    .q-range {
+      display: inline-flex; align-items: center; gap: .3rem;
+      font-size: .7rem; color: var(--slate-400);
+    }
+    .q-range-pill {
+      background: var(--slate-100); color: var(--slate-500);
+      font-size: .65rem; font-weight: 700;
+      padding: .1rem .5rem; border-radius: 9999px;
+    }
+    .q-error {
+      font-size: .7rem; color: var(--rose);
+      margin-top: .3rem; display: none;
+      align-items: center; gap: .25rem;
+    }
+    .q-error.show { display: flex; }
+
+    /* ── INPUT: ukuran SERAGAM untuk semua pertanyaan ── */
+    .q-input-wrap { flex-shrink: 0; }
+    .q-input {
+      width: 90px;          /* lebar seragam */
+      border: 1.5px solid var(--slate-200);
+      border-radius: 10px;
+      padding: .55rem .5rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--slate-900);
+      background: var(--white);
+      transition: border-color .15s, box-shadow .15s;
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+    .q-input::-webkit-inner-spin-button,
+    .q-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    .q-input:focus {
+      outline: none;
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(11,60,109,.1);
+    }
+    .q-input.filled { border-color: var(--emerald); background: var(--emerald-bg); color: var(--emerald); }
+
+    /* submit row */
+    .submit-row {
+      display: flex; justify-content: flex-end; align-items: center;
+      gap: 1rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--slate-100); margin-top: .5rem;
+    }
+    .submit-hint { font-size: .76rem; color: var(--slate-400); flex: 1; }
+    .btn-submit {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      color: var(--white); border: none; cursor: pointer;
+      padding: .75rem 1.75rem; border-radius: 11px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: .85rem; font-weight: 700;
+      box-shadow: 0 4px 14px rgba(11,60,109,.25);
+      transition: all .18s;
+    }
+    .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(11,60,109,.32); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-submit svg { width: 16px; height: 16px; }
+
+    /* ═══════ MODALS ═══════ */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 500;
+      display: none; align-items: center; justify-content: center;
+      background: rgba(15,23,42,.6); backdrop-filter: blur(4px);
+      padding: 1rem;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: 22px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.2);
+      width: 100%; max-width: 580px;
+      animation: modalIn .25s ease both;
+    }
+    @keyframes modalIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .modal-inner { padding: 2rem 2.25rem; }
+    .modal-eyebrow { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; margin-bottom: .5rem; }
+    .modal-eyebrow.success { color: var(--emerald); }
+    .modal-eyebrow.warning { color: var(--amber); }
+    .modal-eyebrow.danger  { color: var(--rose); }
+    .modal-title { font-family: 'Sora', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--slate-900); margin-bottom: .65rem; }
+    .modal-desc { font-size: .82rem; color: var(--slate-500); line-height: 1.65; }
+    .modal-actions { display: flex; flex-direction: row-reverse; gap: .75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .btn-m-primary { display: inline-flex; align-items: center; gap: .35rem; background: linear-gradient(135deg, var(--navy), var(--navy-mid)); color: var(--white); border: none; cursor: pointer; padding: .65rem 1.5rem; border-radius: 10px; font-size: .82rem; font-weight: 700; transition: all .18s; }
+    .btn-m-primary:hover { box-shadow: 0 4px 14px rgba(11,60,109,.28); }
+    .btn-m-secondary { display: inline-flex; align-items: center; gap: .35rem; background: var(--white); color: var(--slate-600); border: 1.5px solid var(--slate-200); cursor: pointer; padding: .65rem 1.5rem; border-radius: 10px; font-size: .82rem; font-weight: 600; transition: all .18s; }
+    .btn-m-secondary:hover { background: var(--slate-50); border-color: var(--slate-300); }
+
+    /* result modal special */
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; margin: 1.25rem 0; }
+    .result-box { background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: 14px; padding: 1.1rem 1.25rem; }
+    .result-box-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--slate-400); margin-bottom: .65rem; }
+    .result-category-row { display: flex; align-items: center; gap: .85rem; }
+    .result-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+    .result-category-name { font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--slate-900); }
+    .result-badge { display: inline-block; padding: .2rem .7rem; border-radius: 9999px; font-size: .68rem; font-weight: 700; margin-top: .3rem; }
+    .result-score-val { font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; color: var(--slate-900); line-height: 1; margin-bottom: .65rem; }
+    .result-bar-track { height: 8px; border-radius: 9999px; background: var(--slate-200); overflow: hidden; margin-bottom: .35rem; }
+    .result-bar-fill { height: 100%; border-radius: 9999px; transition: width 1s ease; }
+    .result-bar-scale { font-size: .68rem; color: var(--slate-400); }
+    .saran-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 14px; padding: 1.1rem 1.25rem; }
+    .saran-title { font-size: .78rem; font-weight: 700; color: #92400e; margin-bottom: .75rem; display: flex; align-items: center; gap: .4rem; }
+    .saran-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+    .saran-item { background: var(--white); border-radius: 9px; padding: .55rem .7rem; font-size: .74rem; color: var(--slate-600); line-height: 1.5; display: flex; gap: .4rem; align-items: flex-start; }
+    .saran-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--amber); flex-shrink: 0; margin-top: 5px; }
+
+    .modal-footer-actions { display: flex; flex-direction: row-reverse; gap: .75rem; margin-top: 1.25rem; flex-wrap: wrap; }
+    .btn-view { display: inline-flex; align-items: center; gap: .35rem; background: linear-gradient(135deg, var(--navy), var(--navy-mid)); color: var(--white); border: none; cursor: pointer; padding: .65rem 1.5rem; border-radius: 10px; font-size: .82rem; font-weight: 700; text-decoration: none; }
+    .btn-close-sm { display: inline-flex; align-items: center; gap: .35rem; background: var(--white); color: var(--slate-600); border: 1.5px solid var(--slate-200); cursor: pointer; padding: .65rem 1.5rem; border-radius: 10px; font-size: .82rem; font-weight: 600; transition: all .18s; }
+    .btn-close-sm:hover { background: var(--slate-50); }
+
+    .modal-close-btn {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      background: var(--slate-100); border: none; cursor: pointer;
+      width: 30px; height: 30px; border-radius: 8px;
+      color: var(--slate-500); font-size: .9rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .modal-close-btn:hover { background: var(--slate-200); }
+    .modal-relative { position: relative; }
+
+    /* ═══════ RESPONSIVE ═══════ */
+    @media (max-width: 820px) {
+      .hamburger { display: flex; }
+      .topbar-user .topbar-username { display: none; }
+      .sidebar { transform: translateX(calc(-1 * var(--sidebar-w))); }
+      .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,.15); }
+      .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 99; background: rgba(0,0,0,.35); }
+      .sidebar-overlay.open { display: block; }
+      .main-content { margin-left: 0; padding: 1rem; }
+      .konsultasi-header, .form-body, .petunjuk-box { padding-left: 1.35rem; padding-right: 1.35rem; }
+      .progress-tracker { padding: 1rem 1.35rem; }
+      .q-card { flex-wrap: wrap; gap: .75rem; }
+      .q-input-wrap { width: 100%; display: flex; justify-content: flex-end; }
+      .result-grid, .saran-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .konsultasi-header, .form-body, .petunjuk-box { padding-left: 1rem; padding-right: 1rem; }
+      .progress-tracker { padding: .85rem 1rem; }
+      .modal-inner { padding: 1.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="hamburger" id="hamburger" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </div>
+  <a href="/dashboard" class="topbar-brand">
+    <div class="brand-logo">AG</div>
+    <div>
+      <div class="brand-name">ADDICTICA</div>
+      <div class="brand-sub">Fuzzy Tsukamoto</div>
+    </div>
+  </a>
+  <div class="topbar-right">
+    <div class="topbar-user">
+      <!-- Avatar topbar: foto + inisial fallback -->
+      <div class="topbar-avatar" id="topbarAvatar">
+        <img id="topbarPhoto" src="" alt="">
+        <span class="topbar-avatar-initial" id="topbarInitial">U</span>
+      </div>
+      <span class="topbar-username" id="topbarName">Pengguna</span>
+    </div>
+    <a href="/logout" class="btn-logout">⏻ Logout</a>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-profile">
+      <div class="profile-avatar-wrap">
+        <!-- Container baru: foto + inisial bisa overlap -->
+        <div class="profile-avatar-box" id="sidebarAvatarBox">
+          <div class="profile-initials" id="sidebarInitial">U</div>
+          <img id="sidebarFoto" src="" alt="Foto Profil">
+        </div>
+        <div class="profile-badge"></div>
+      </div>
+      <div class="profile-name" id="sidebarNama">Nama User</div>
+      <div class="profile-email" id="sidebarEmail">user@email.com</div>
+      <div class="profile-role">👤 Pengguna</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Menu Utama</div>
+      <a href="/dashboard" class="nav-item">
+        <div class="nav-icon">🏠</div><span class="nav-label">Dashboard</span><span class="nav-arrow">›</span>
+      </a>
+      <a href="/profil" class="nav-item">
+        <div class="nav-icon">👤</div><span class="nav-label">Profil</span><span class="nav-arrow">›</span>
+      </a>
+      <div class="nav-section-label" style="margin-top:.75rem">Klasifikasi</div>
+      <a href="/user_konsultasi" class="nav-item active">
+        <div class="nav-icon">📝</div><span class="nav-label">Konsultasi</span><span class="nav-arrow">›</span>
+      </a>
+      <a href="/user_hasil" class="nav-item">
+        <div class="nav-icon">📊</div><span class="nav-label">Hasil Diagnosa</span><span class="nav-arrow">›</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/logout">🚪 <span>Keluar dari Akun</span></a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="konsultasi-wrapper">
+
+      <!-- Header Banner -->
+      <div class="konsultasi-header">
+        <div class="konsultasi-header-blob"></div>
+        <div class="konsultasi-header-inner">
+          <div class="kh-eyebrow"><div class="kh-dot"></div>Klasifikasi · Fuzzy Tsukamoto</div>
+          <h1>Kuesioner <span>Kecanduan</span> Game Online</h1>
+          <p>Jawab 12 pertanyaan berikut dengan jujur sesuai kondisi.</p>
+        </div>
+      </div>
+
+      <!-- Progress Tracker -->
+      <div class="progress-tracker" id="progressTracker"></div>
+
+      <!-- Petunjuk -->
+      <div class="petunjuk-box">
+        <div class="petunjuk-icon">ℹ️</div>
+        <div>
+          <div class="petunjuk-title">Petunjuk Pengisian</div>
+          <div class="petunjuk-text">Isi setiap kolom dengan angka sesuai kondisi pribadi. Pastikan nilai yang dimasukkan berada dalam rentang yang tertera. Jawablah seluruh 12 pertanyaan sebelum mengirimkan kuesioner.</div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="form-body">
+        <form id="konsultasiForm">
+
+          <div class="q-card" id="block-q1">
+            <div class="q-num">1</div>
+            <div class="q-content">
+              <div class="q-text">Berapa jam kamu bermain game dalam satu hari?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 12 jam/hari</span></div>
+              <div class="q-error" id="err-q1">⚠ Masukkan angka antara 0 sampai 12.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q1" id="q1" min="0" max="12" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q2">
+            <div class="q-num">2</div>
+            <div class="q-content">
+              <div class="q-text">Berapa jam kamu bermain game pada jam sekolah?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 8 jam/hari</span></div>
+              <div class="q-error" id="err-q2">⚠ Masukkan angka antara 0 sampai 8.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q2" id="q2" min="0" max="8" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q3">
+            <div class="q-num">3</div>
+            <div class="q-content">
+              <div class="q-text">Berapa jam kamu bermain game pada hari libur?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 12 jam/minggu</span></div>
+              <div class="q-error" id="err-q3">⚠ Masukkan angka antara 0 sampai 12.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q3" id="q3" min="0" max="12" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q4">
+            <div class="q-num">4</div>
+            <div class="q-content">
+              <div class="q-text">Dalam seminggu berapa hari kamu bermain game online?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 7 hari/minggu</span></div>
+              <div class="q-error" id="err-q4">⚠ Masukkan angka antara 0 sampai 7.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q4" id="q4" min="0" max="7" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q5">
+            <div class="q-num">5</div>
+            <div class="q-content">
+              <div class="q-text">Dalam satu hari berapa jam kamu tidur?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">1 – 8 jam/hari</span></div>
+              <div class="q-error" id="err-q5">⚠ Masukkan angka antara 1 sampai 8.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q5" id="q5" min="1" max="8" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q6">
+            <div class="q-num">6</div>
+            <div class="q-content">
+              <div class="q-text">Berapa kali kamu bermain game saat mengerjakan tugas?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 7 kali</span></div>
+              <div class="q-error" id="err-q6">⚠ Masukkan angka antara 0 sampai 7.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q6" id="q6" min="0" max="7" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q7">
+            <div class="q-num">7</div>
+            <div class="q-content">
+              <div class="q-text">Berapa banyak kamu tidak mengerjakan tugas dalam satu minggu?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 7 kali</span></div>
+              <div class="q-error" id="err-q7">⚠ Masukkan angka antara 0 sampai 7.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q7" id="q7" min="0" max="7" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q8">
+            <div class="q-num">8</div>
+            <div class="q-content">
+              <div class="q-text">Dalam satu hari berapa kali kamu ditegur guru karena bermain game?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 7 kali</span></div>
+              <div class="q-error" id="err-q8">⚠ Masukkan angka antara 0 sampai 7.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q8" id="q8" min="0" max="7" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+
+          <div class="q-card" id="block-q9">
+            <div class="q-num">9</div>
+            <div class="q-content">
+              <div class="q-text">Berapa penurunan nilai rata-rata kamu dibandingkan sebelumnya?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 20 poin</span></div>
+              <div class="q-error" id="err-q9">⚠ Masukkan angka antara 0 sampai 20.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q9" id="q9" min="0" max="20" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q10">
+            <div class="q-num">10</div>
+            <div class="q-content">
+              <div class="q-text">Dalam satu hari berapa jam tambahan waktu untuk bermain game?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 8 jam</span></div>
+              <div class="q-error" id="err-q10">⚠ Masukkan angka antara 0 sampai 8.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q10" id="q10" min="0" max="8" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q11">
+            <div class="q-num">11</div>
+            <div class="q-content">
+              <div class="q-text">Dalam satu hari berapa kali kamu merasa gelisah?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 7 kali</span></div>
+              <div class="q-error" id="err-q11">⚠ Masukkan angka antara 0 sampai 7.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q11" id="q11" min="0" max="7" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <div class="q-card" id="block-q12">
+            <div class="q-num">12</div>
+            <div class="q-content">
+              <div class="q-text">Dalam sehari berapa kali kamu mencoba untuk berhenti main game?</div>
+              <div class="q-range">Rentang: <span class="q-range-pill">0 – 10 kali</span></div>
+              <div class="q-error" id="err-q12">⚠ Masukkan angka antara 0 sampai 10.</div>
+            </div>
+            <div class="q-input-wrap">
+              <input type="number" name="q12" id="q12" min="0" max="10" placeholder="–" required class="q-input">
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="submit-row">
+            <div class="submit-hint">Pastikan semua jawaban telah diisi sebelum mengirimkan kuesioner.</div>
+            <button type="submit" id="submitBtn" class="btn-submit">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+              Kirim Jawaban
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════ MODAL: KONFIRMASI ═══════ -->
+<div class="modal-backdrop" id="confirmModal">
+  <div class="modal-box">
+    <div class="modal-inner modal-relative">
+      <button class="modal-close-btn" onclick="closeModal('confirmModal')">✕</button>
+      <div class="modal-eyebrow warning">Konfirmasi</div>
+      <div class="modal-title">Kirim Jawaban Kuesioner?</div>
+      <div class="modal-desc">Apakah yakin ingin mengirimkan jawaban kuesioner? Setelah dikirim, jawaban tidak dapat diubah.</div>
+      <div class="modal-actions">
+        <button class="btn-m-primary" id="confirmSubmit">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+          Ya, Kirim Jawaban
+        </button>
+        <button class="btn-m-secondary" onclick="closeModal('confirmModal')">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MODAL: TIDAK LENGKAP ═══════ -->
+<div class="modal-backdrop" id="incompleteModal">
+  <div class="modal-box">
+    <div class="modal-inner modal-relative">
+      <button class="modal-close-btn" onclick="closeModal('incompleteModal')">✕</button>
+      <div class="modal-eyebrow danger">Perhatian</div>
+      <div class="modal-title">Jawaban Belum Lengkap</div>
+      <div class="modal-desc" id="incompleteMsg">Masih terdapat beberapa pertanyaan yang belum dijawab atau melebihi batas yang ditentukan. Silakan periksa kembali sebelum mengirimkan kuesioner.</div>
+      <div class="modal-actions">
+        <button class="btn-m-primary" onclick="closeModal('incompleteModal')">Mengerti</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MODAL: HASIL ═══════ -->
+<div class="modal-backdrop" id="resultModal">
+  <div class="modal-box" style="max-width:640px;">
+    <div class="modal-inner modal-relative">
+      <button class="modal-close-btn" onclick="closeModal('resultModal')">✕</button>
+      <div class="modal-eyebrow success">Hasil Analisis</div>
+      <div class="modal-title">Tingkat Kecanduan Game Online</div>
+      <div class="modal-desc" id="modalDesc">Ringkasan hasil berdasarkan jawaban kuesioner.</div>
+
+      <div class="result-grid">
+        <div class="result-box">
+          <div class="result-box-label">Kategori</div>
+          <div class="result-category-row">
+            <div class="result-icon" id="modalIcon">🟢</div>
+            <div>
+              <div class="result-category-name" id="modalCategory">Rendah</div>
+              <div class="result-badge" id="modalBadge">Stabil</div>
+            </div>
+          </div>
+        </div>
+        <div class="result-box">
+          <div class="result-box-label">Skor Analisis</div>
+          <div class="result-score-val" id="modalScore">–</div>
+          <div class="result-bar-track">
+            <div class="result-bar-fill" id="modalProgress" style="width:0%;background:#10b981;"></div>
+          </div>
+          <div class="result-bar-scale">Skala 0 – 100</div>
+        </div>
+      </div>
+
+      <div class="saran-box">
+        <div class="saran-title">💡 Saran untuk Mengatasi Kecanduan</div>
+        <div class="saran-grid">
+          <div class="saran-item"><div class="saran-dot"></div>Atur batas waktu bermain setiap hari.</div>
+          <div class="saran-item"><div class="saran-dot"></div>Utamakan kegiatan belajar dan produktif.</div>
+          <div class="saran-item"><div class="saran-dot"></div>Kurangi penggunaan perangkat sebelum tidur.</div>
+          <div class="saran-item"><div class="saran-dot"></div>Isi waktu dengan olahraga, membaca, atau sosial.</div>
+        </div>
+      </div>
+
+      <div class="modal-footer-actions">
+        <a href="/user_hasil" class="btn-view">Lihat Ringkasan Lengkap</a>
+        <button class="btn-close-sm" onclick="closeModal('resultModal')">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── Sidebar toggle ───
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('open');
+  }
+
+  // ─── Helper: terapkan foto ke avatar element ───
+  // elImg   = <img> yang akan ditampilkan
+  // elInit  = element inisial yang akan disembunyikan (atau null)
+  // src     = URL foto
+  function applyPhoto(elImg, elInit, src) {
+    if (!src || src === 'null' || src === '') return;
+    const path = src.startsWith('uploads') ? '/' + src : '/uploads/' + src;
+    elImg.src = path;
+    elImg.style.display = 'block';
+    if (elInit) elInit.style.display = 'none';
+    elImg.onerror = () => {
+      elImg.style.display = 'none';
+      if (elInit) elInit.style.display = '';
+    };
+  }
+
+  // ─── User data: satu fetch, update semua elemen sekaligus ───
+  fetch('/api/user').then(r => r.json()).then(data => {
+    const nama  = data.nama  || 'User';
+    const email = data.email || '-';
+    const foto  = data.foto  || '';
+    const init  = nama.charAt(0).toUpperCase();
+
+    // Sidebar
+    document.getElementById('sidebarNama').innerText  = nama;
+    document.getElementById('sidebarEmail').innerText = email;
+    document.getElementById('sidebarInitial').innerText = init;
+
+    // Topbar
+    document.getElementById('topbarName').innerText    = nama;
+    document.getElementById('topbarInitial').innerText = init;
+
+    // Foto sidebar
+    applyPhoto(
+      document.getElementById('sidebarFoto'),
+      document.getElementById('sidebarInitial'),
+      foto
+    );
+
+    // Foto topbar (sama persis: tampil foto, sembunyikan inisial)
+    applyPhoto(
+      document.getElementById('topbarPhoto'),
+      document.getElementById('topbarInitial'),
+      foto
+    );
+
+  }).catch(() => {});
+
+  // ─── Soal config ───
+  const questions = [
+    { name:'q1',  min:0,  max:12 },
+    { name:'q2',  min:0,  max:8  },
+    { name:'q3',  min:0,  max:12 },
+    { name:'q4',  min:0,  max:7  },
+    { name:'q5',  min:1,  max:8  },
+    { name:'q6',  min:0,  max:7  },
+    { name:'q7',  min:0,  max:7  },
+    { name:'q8',  min:0,  max:7  },
+    { name:'q9',  min:0,  max:20 },
+    { name:'q10', min:0,  max:8  },
+    { name:'q11', min:0,  max:7  },
+    { name:'q12', min:0,  max:10 }
+  ];
+
+  // ─── Progress tracker build ───
+  const pt = document.getElementById('progressTracker');
+  questions.forEach((q, i) => {
+    const step = document.createElement('div');
+    step.className = 'pt-step';
+    step.innerHTML = `<div class="pt-circle" id="pt-${q.name}">${i+1}</div><span class="pt-label" id="ptl-${q.name}">${i+1}</span>`;
+    pt.appendChild(step);
+    if (i < questions.length - 1) {
+      const line = document.createElement('div');
+      line.className = 'pt-line'; line.id = `ptline-${i}`;
+      pt.appendChild(line);
+    }
+  });
+
+  function updateProgress() {
+    questions.forEach((q, i) => {
+      const inp    = document.getElementById(q.name);
+      const circle = document.getElementById('pt-' + q.name);
+      const line   = document.getElementById('ptline-' + i);
+      const val    = parseInt(inp.value, 10);
+      const filled = inp.value !== '' && !isNaN(val) && val >= q.min && val <= q.max;
+      circle.className = 'pt-circle' + (filled ? ' done' : '');
+      if (line) filled ? line.classList.add('done') : line.classList.remove('done');
+    });
+  }
+
+  // ─── Input listeners ───
+  questions.forEach(q => {
+    const inp   = document.getElementById(q.name);
+    const errEl = document.getElementById('err-' + q.name);
+    const block = document.getElementById('block-' + q.name);
+
+    inp.addEventListener('input', () => {
+      let val = parseInt(inp.value, 10);
+      if (inp.value === '' || isNaN(val)) { errEl.classList.remove('show'); inp.classList.remove('filled'); updateProgress(); return; }
+      if (val < q.min) { inp.value = q.min; val = q.min; }
+      if (val > q.max) { inp.value = q.max; val = q.max; }
+      if (val >= q.min && val <= q.max) {
+        errEl.classList.remove('show');
+        block.classList.remove('invalid');
+        inp.classList.add('filled');
+      }
+      updateProgress();
+    });
+    inp.addEventListener('blur', () => {
+      let val = parseInt(inp.value, 10);
+      if (!isNaN(val)) { if (val < q.min) inp.value = q.min; if (val > q.max) inp.value = q.max; }
+      updateProgress();
+    });
+  });
+
+  // ─── Modal helpers ───
+  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.querySelectorAll('.modal-backdrop').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
+
+  // ─── Validasi ───
+  function validateAnswers() {
+    let valid = true, first = null;
+    questions.forEach(q => {
+      const inp   = document.getElementById(q.name);
+      const errEl = document.getElementById('err-' + q.name);
+      const block = document.getElementById('block-' + q.name);
+      const val   = parseInt(inp.value, 10);
+      const empty = inp.value === '' || isNaN(val);
+      const oor   = !empty && (val < q.min || val > q.max);
+      if (empty || oor) {
+        block.classList.add('invalid'); errEl.classList.add('show');
+        if (!first) first = block; valid = false;
+      } else {
+        block.classList.remove('invalid'); errEl.classList.remove('show');
+      }
+    });
+    return { valid, first };
+  }
+
+  // ─── Result theming ───
+  function applyResultTheme(level) {
+    const icon  = document.getElementById('modalIcon');
+    const badge = document.getElementById('modalBadge');
+    const bar   = document.getElementById('modalProgress');
+    const map = {
+      Rendah: { icon:'🟢', badge:'Stabil',            badgeBg:'#ecfdf5', badgeColor:'#059669', barColor:'#10b981' },
+      Sedang: { icon:'🟡', badge:'Perlu Diperhatikan', badgeBg:'#fffbeb', badgeColor:'#d97706', barColor:'#f59e0b' },
+      Tinggi: { icon:'🔴', badge:'Perlu Tindakan',     badgeBg:'#fff1f2', badgeColor:'#e11d48', barColor:'#f43f5e' }
+    };
+    const t = map[level] || map.Rendah;
+    icon.textContent         = t.icon;
+    badge.textContent        = t.badge;
+    badge.style.background   = t.badgeBg;
+    badge.style.color        = t.badgeColor;
+    bar.style.background     = t.barColor;
+  }
+
+  // ─── Submit ───
+  document.getElementById('confirmSubmit').addEventListener('click', async () => {
+    closeModal('confirmModal');
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = 'Mengirim...';
+    try {
+      const body = new URLSearchParams(new FormData(document.getElementById('konsultasiForm')));
+      const res  = await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      document.getElementById('modalCategory').textContent = data.hasil || '-';
+      document.getElementById('modalDesc').textContent     = data.pesan || 'Ringkasan hasil berdasarkan jawaban kuesioner.';
+      document.getElementById('modalScore').textContent    = typeof data.nilaiZ === 'number' ? data.nilaiZ : '-';
+      const score = typeof data.nilaiZ === 'number' ? Math.max(0, Math.min(100, data.nilaiZ)) : 35;
+      document.getElementById('modalProgress').style.width = score + '%';
+      applyResultTheme(data.hasil || 'Rendah');
+      openModal('resultModal');
+    } catch (e) {
+      alert('Terjadi kesalahan saat mengirim jawaban. Silakan coba lagi.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M4 10h12M11 5l5 5-5 5"/></svg> Kirim Jawaban';
+    }
+  });
+
+  document.getElementById('konsultasiForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const { valid, first } = validateAnswers();
+    if (!valid) {
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      openModal('incompleteModal');
+      return;
+    }
+    openModal('confirmModal');
+  });
+</script>
+</body>
+</html>
